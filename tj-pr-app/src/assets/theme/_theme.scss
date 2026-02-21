@@ -1,0 +1,8 @@
+@use 'variables' as *;
+
+:root {
+  @each $key, $value in $tj-pr-colors {
+    --tj-pr-#{$key}: #{$value};
+    --tj-pr-#{$key}-rgb: #{red($value)}, #{green($value)}, #{blue($value)};
+  }
+}

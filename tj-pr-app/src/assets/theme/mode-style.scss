@@ -1,0 +1,138 @@
+/* LIGHT MODE */
+[data-theme="light"] {
+  --body-bg: var(--bh-80);
+  --text-color: var(--bh-100);
+  --text-color-button: var(--bh-0);
+  --text-color-button-secondary: var(--bh-100);
+
+  /* azul escuro */
+  --icon-color: var(--bh-0);
+  --icon-social: var(--bh-100);
+
+  /* ícones escuros */
+  --header-bg: var(--bh-100);
+  --header-bg-scroll: rgba(var(--bh-110-rgb), 0.85);
+  --icon-panel-bg: var(--bh-100);
+
+  --smoke-1: rgba(180, 200, 255, 0.35);
+  --smoke-2: rgba(220, 180, 255, 0.35);
+  --smoke-3: rgba(140, 180, 255, 0.3);
+  --smoke-opacity: 0.22;
+
+  // overview
+  --hero-overlay-top: rgba(0, 0, 0, 0.35);
+  --hero-overlay-bottom: rgba(0, 0, 0, 0.5);
+  --hero-blob-color: rgba(var(--bh-0-rgb), 0.07);
+
+  // benefits
+  --benefits-bg: var(--bh-90);
+  --benefits-text: var(--bh-0);
+  --benefits-subtext: rgba(0, 0, 0, 0.7);
+
+  --benefit-card-bg: var(--bh-0);
+  --benefit-card-border: rgba(255, 255, 255, 0.12);
+  --benefit-card-shadow: rgba(0, 0, 0, 0.15);
+
+  --benefit-card-title: var(--bh-20);
+  --benefit-card-text: rgba(0, 0, 0, 0.75);
+
+  --benefit-blob-1: rgba(72, 116, 236, 0.25);
+  --benefit-blob-2: rgba(116, 72, 236, 0.25);
+}
+
+/* DARK MODE */
+[data-theme="dark"] {
+  --body-bg: var(--bh-0);
+  /* fundo azul escuro */
+  --text-color: var(--bh-100);
+  /* texto branco */
+
+  /* ícones precisam ser ESCUROS no dark mode */
+  --icon-color: var(--bh-100);
+  /* azul escuro / quase preto */
+
+  --header-bg: var(--bh-0);
+  /* header branca */
+  --header-bg-scroll: rgba(var(--bh-100-rgb), 0.85);
+
+  --icon-panel-bg: var(--bh-100);
+
+  --smoke-1: rgba(72, 116, 236, 0.65);
+  --smoke-2: rgba(116, 72, 236, 0.65);
+  --smoke-3: rgba(85, 123, 247, 0.55);
+  --smoke-opacity: 0.32;
+
+  // overview
+  --hero-overlay-top: rgba(0, 0, 0, 0.7);
+  --hero-overlay-bottom: rgba(0, 0, 0, 0.88);
+  --hero-blob-color: rgba(255, 255, 255, 0.1);
+
+  // benefits
+  --benefits-bg: var(--bh-0); /* seu dark profundo */
+  --benefits-text: var(--bh-100); /* branco */
+  --benefits-subtext: rgba(255, 255, 255, 0.75);
+
+  --benefit-card-bg: var(--bh-0); /* #141720 transparente */
+  --benefit-card-border: rgba(255, 255, 255, 0.05);
+  --benefit-card-shadow: rgba(0, 0, 0, 0.35);
+
+  --benefit-card-title: var(--bh-100);
+  --benefit-card-text: rgba(255, 255, 255, 0.75);
+
+  --benefit-blob-1: rgba(72, 116, 236, 0.35);
+  --benefit-blob-2: rgba(116, 72, 236, 0.35);
+}
+
+html,
+body {
+  background: var(--body-bg);
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+ul,
+ol,
+section,
+article,
+header,
+footer {
+  color: var(--text-color) !important;
+  transition: color 0.3s ease;
+}
+
+mat-icon,
+i,
+svg {
+  color: var(--icon-color) !important;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+.hero-btn-primary {
+  background: var(--body-bg);
+  color: var(--text-color-button);
+
+  &:hover {
+    background: rgba(var(--text-color-rgb), 0.9);
+  }
+}
+
+.hero-btn-secondary {
+  border-color: var(--body-bg);
+  color: var(--text-color-button-secondary);
+
+  &:hover {
+    background: rgba(var(--text-color-rgb), 0.1);
+  }
+}

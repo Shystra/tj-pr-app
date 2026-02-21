@@ -1,0 +1,39 @@
+.navbar-iris {
+  width: 100%;
+  padding: 14px 0;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 999;
+  background: var(--header-bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  transition:
+    background 0.35s ease,
+    backdrop-filter 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.navbar-brand img {
+  transition: height 0.3s ease;
+}
+
+@media (max-width: 992px) {
+  .navbar-iris .container-fluid {
+    justify-content: center !important;
+  }
+
+  .navbar-iris nav {
+    text-align: center;
+  }
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  background: var(--icon-panel-bg) !important;
+}
+
+mat-icons {
+  color: var(--icon-color) !important;
+  transition: color 0.3s ease;
+}

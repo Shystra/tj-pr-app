@@ -1,0 +1,48 @@
+<footer class="app-footer position-relative overflow-hidden">
+  <div class="footer-glow"></div>
+  <div class="container footer-content">
+    <div class="footer-logo">
+      <img src="../../../../assets/images/0190.png" alt="Logo" />
+    </div>
+    <div class="footer-info">
+      <h3 class="footer-title">
+        {{ 'FOOTER.CONTACT.TITLE' | translate }}
+      </h3>
+
+      <ul class="footer-list">
+        <li>
+          <i class="bi bi-whatsapp"></i>
+          {{ 'FOOTER.CONTACT.PHONE' | translate }}
+        </li>
+        <li>
+          <i class="bi bi-envelope"></i>
+          {{ 'FOOTER.CONTACT.EMAIL' | translate }}
+        </li>
+        <li>
+          <i class="bi bi-geo-alt"></i>
+          {{ 'FOOTER.CONTACT.LOCATION' | translate }}
+        </li>
+      </ul>
+    </div>
+    <div class="footer-social">
+      <h3 class="footer-title">
+        {{ 'FOOTER.SOCIAL.TITLE' | translate }}
+      </h3>
+      <div class="social-icons">
+        <a [href]="urlInstagram" target="_blank" class="social-circle">
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a [href]="urlFacebook" target="_blank" class="social-circle">
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a [href]="urlTikTok" target="_blank" class="social-circle">
+          <i class="bi bi-tiktok"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom text-center">
+    © {{ currentYear }}
+    {{ 'FOOTER.RIGHTS' | translate }}
+  </div>
+</footer>
