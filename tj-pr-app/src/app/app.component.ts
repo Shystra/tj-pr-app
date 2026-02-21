@@ -16,8 +16,7 @@ import { HeaderComponent } from './layout/components/header/header.component';
   standalone: true,
   selector: 'app-root',
   template: `
-    <app-header></app-header>
-    <router-outlet></router-outlet>
+<router-outlet></router-outlet>
   `,
   styleUrl: './app.component.scss',
   imports: [RouterModule, RouterOutlet, TranslateModule, HeaderComponent, CommonModule],

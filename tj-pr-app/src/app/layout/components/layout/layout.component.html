@@ -1,0 +1,22 @@
+<app-header></app-header>
+
+<section class="container-fluid" style="padding-top: 12vh;">
+
+  <mat-tab-group class="mt-3">
+
+    <mat-tab label="Control">
+      <app-control></app-control>
+    </mat-tab>
+
+    <mat-tab label="Monitoring">
+      <app-monitoring></app-monitoring>
+    </mat-tab>
+
+    <mat-tab label="Analystic">
+      <app-analystic></app-analystic>
+    </mat-tab>
+
+  </mat-tab-group>
+
+  <router-outlet></router-outlet>
+</section>

@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+/* --------------------- */
+/* 1) TODOS OS @use      */
+/* --------------------- */
+@use "assets/theme/variables" as *;
+@use "assets/theme/theme" as *;
+@use "bootstrap/scss/bootstrap" as *;
+
+/* --------------------- */
+/* 2) IMPORTS CSS */
+/* --------------------- */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&display=swap");
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* --------------------- */
+/* 3) CSS NORMAL         */
+/* --------------------- */
+html,
+body {
+  height: 100%;
+  background: var(--body-bg);
+  color: var(--text-color);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif !important;
+}
+
+a {
+  color: inherit;
+}

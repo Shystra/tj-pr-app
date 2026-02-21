@@ -1,18 +1,18 @@
 /* LIGHT MODE */
 [data-theme="light"] {
-  --body-bg: var(--bh-80);
-  --text-color: var(--bh-100);
-  --text-color-button: var(--bh-0);
-  --text-color-button-secondary: var(--bh-100);
+  --body-bg: var(--tj-pr-90);
+  --text-color: var(--tj-pr-100);
+  --text-color-button: var(--tj-pr-0);
+  --text-color-button-secondary: var(--tj-pr-100);
 
   /* azul escuro */
-  --icon-color: var(--bh-0);
-  --icon-social: var(--bh-100);
+  --icon-color: var(--tj-pr-90);
+  --icon-social: var(--tj-pr-90);
 
   /* ícones escuros */
-  --header-bg: var(--bh-100);
-  --header-bg-scroll: rgba(var(--bh-110-rgb), 0.85);
-  --icon-panel-bg: var(--bh-100);
+  --header-bg: var(--tj-pr-100);
+  --header-bg-scroll: rgba(var(--tj-pr-110-rgb), 0.85);
+  --icon-panel-bg: var(--tj-pr-90);
 
   --smoke-1: rgba(180, 200, 255, 0.35);
   --smoke-2: rgba(220, 180, 255, 0.35);
@@ -22,40 +22,48 @@
   // overview
   --hero-overlay-top: rgba(0, 0, 0, 0.35);
   --hero-overlay-bottom: rgba(0, 0, 0, 0.5);
-  --hero-blob-color: rgba(var(--bh-0-rgb), 0.07);
+  --hero-blob-color: rgba(var(--tj-pr-0-rgb), 0.07);
 
   // benefits
-  --benefits-bg: var(--bh-90);
-  --benefits-text: var(--bh-0);
+  --benefits-bg: var(--tj-pr-90);
+  --benefits-text: var(--tj-pr-0);
   --benefits-subtext: rgba(0, 0, 0, 0.7);
 
-  --benefit-card-bg: var(--bh-0);
+  --benefit-card-bg: var(--tj-pr-0);
   --benefit-card-border: rgba(255, 255, 255, 0.12);
   --benefit-card-shadow: rgba(0, 0, 0, 0.15);
 
-  --benefit-card-title: var(--bh-20);
+  --benefit-card-title: var(--tj-pr-20);
   --benefit-card-text: rgba(0, 0, 0, 0.75);
 
   --benefit-blob-1: rgba(72, 116, 236, 0.25);
   --benefit-blob-2: rgba(116, 72, 236, 0.25);
+
+  --monitor-green: linear-gradient(135deg, #16a34a, #15803d);
+  --monitor-blue: linear-gradient(135deg, #2563eb, #4338ca);
+  --monitor-purple: linear-gradient(135deg, #a855f7, #ec4899);
+  --monitor-text: #ffffff;
+  --monitor-icon-bg: rgba(255, 255, 255, 0.18);
+  --monitor-activity-bg: #f4f7fb; /* leve azul institucional */
+  --monitor-activity-border: rgba(16, 41, 55, 0.08);
 }
 
 /* DARK MODE */
 [data-theme="dark"] {
-  --body-bg: var(--bh-0);
+  --body-bg: var(--tj-pr-100);
   /* fundo azul escuro */
-  --text-color: var(--bh-100);
+  --text-color: var(--tj-pr-90);
   /* texto branco */
 
   /* ícones precisam ser ESCUROS no dark mode */
-  --icon-color: var(--bh-100);
+  --icon-color: var(--tj-pr-90);
   /* azul escuro / quase preto */
 
-  --header-bg: var(--bh-0);
+  --header-bg: var(--tj-pr-0);
   /* header branca */
-  --header-bg-scroll: rgba(var(--bh-100-rgb), 0.85);
+  --header-bg-scroll: rgba(var(--tj-pr-100-rgb), 0.85);
 
-  --icon-panel-bg: var(--bh-100);
+  --icon-panel-bg: var(--tj-pr-90);
 
   --smoke-1: rgba(72, 116, 236, 0.65);
   --smoke-2: rgba(116, 72, 236, 0.65);
@@ -68,26 +76,36 @@
   --hero-blob-color: rgba(255, 255, 255, 0.1);
 
   // benefits
-  --benefits-bg: var(--bh-0); /* seu dark profundo */
-  --benefits-text: var(--bh-100); /* branco */
+  --benefits-bg: var(--tj-pr-0); /* seu dark profundo */
+  --benefits-text: var(--tj-pr-100); /* branco */
   --benefits-subtext: rgba(255, 255, 255, 0.75);
 
-  --benefit-card-bg: var(--bh-0); /* #141720 transparente */
+  --benefit-card-bg: var(--tj-pr-0); /* #141720 transparente */
   --benefit-card-border: rgba(255, 255, 255, 0.05);
   --benefit-card-shadow: rgba(0, 0, 0, 0.35);
 
-  --benefit-card-title: var(--bh-100);
+  --benefit-card-title: var(--tj-pr-100);
   --benefit-card-text: rgba(255, 255, 255, 0.75);
 
   --benefit-blob-1: rgba(72, 116, 236, 0.35);
   --benefit-blob-2: rgba(116, 72, 236, 0.35);
+
+  --monitor-green: linear-gradient(135deg, #14532d, #166534);
+  --monitor-blue: linear-gradient(135deg, #1e3a8a, #312e81);
+  --monitor-purple: linear-gradient(135deg, #581c87, #9d174d);
+  --monitor-text: #e5e7eb;
+  --monitor-icon-bg: rgba(255, 255, 255, 0.12);
+  --monitor-activity-bg: #849abbba;
+  --monitor-activity-border: rgba(255, 255, 255, 0.05);
 }
 
 html,
 body {
   background: var(--body-bg);
   color: var(--text-color);
-  transition: background 0.3s ease, color 0.3s ease;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 h1,
@@ -135,4 +153,87 @@ a:hover {
   &:hover {
     background: rgba(var(--text-color-rgb), 0.1);
   }
+}
+
+.monitor-card {
+  color: var(--monitor-text);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.monitor-green {
+  background: var(--monitor-green);
+}
+.monitor-blue {
+  background: var(--monitor-blue);
+}
+.monitor-purple {
+  background: var(--monitor-purple);
+}
+
+.monitor-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background: var(--monitor-icon-bg);
+}
+
+.card.monitor-activity {
+  background: var(--monitor-activity-bg);
+  border: 1px solid var(--monitor-activity-border);
+  transition: background 0.3s ease;
+}
+
+[data-theme="dark"] .monitor-activity {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] .monitor-activity {
+  box-shadow: 0 6px 18px rgba(16, 41, 55, 0.06);
+}
+
+.avatar-circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: var(--monitor-blue);
+  color: white;
+  font-weight: 600;
+}
+
+.search-wrapper {
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--monitor-activity-border);
+  background: var(--monitor-activity-bg);
+  transition: all 0.25s ease;
+}
+
+.search-wrapper i {
+  color: var(--text-color) !important;
+  opacity: 0.6;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="light"] .search-input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.search-wrapper:focus-within {
+  border-color: rgba(72, 116, 236, 0.6);
+  box-shadow: 0 0 0 3px rgba(72, 116, 236, 0.15);
 }
