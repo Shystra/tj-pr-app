@@ -44,7 +44,8 @@
   --monitor-purple: linear-gradient(135deg, #a855f7, #ec4899);
   --monitor-text: #ffffff;
   --monitor-icon-bg: rgba(255, 255, 255, 0.18);
-  --monitor-activity-bg: #f4f7fb; /* leve azul institucional */
+  --monitor-activity-bg: #f4f7fb;
+  /* leve azul institucional */
   --monitor-activity-border: rgba(16, 41, 55, 0.08);
 }
 
@@ -76,11 +77,14 @@
   --hero-blob-color: rgba(255, 255, 255, 0.1);
 
   // benefits
-  --benefits-bg: var(--tj-pr-0); /* seu dark profundo */
-  --benefits-text: var(--tj-pr-100); /* branco */
+  --benefits-bg: var(--tj-pr-0);
+  /* seu dark profundo */
+  --benefits-text: var(--tj-pr-100);
+  /* branco */
   --benefits-subtext: rgba(255, 255, 255, 0.75);
 
-  --benefit-card-bg: var(--tj-pr-0); /* #141720 transparente */
+  --benefit-card-bg: var(--tj-pr-0);
+  /* #141720 transparente */
   --benefit-card-border: rgba(255, 255, 255, 0.05);
   --benefit-card-shadow: rgba(0, 0, 0, 0.35);
 
@@ -167,9 +171,11 @@ a:hover {
 .monitor-green {
   background: var(--monitor-green);
 }
+
 .monitor-blue {
   background: var(--monitor-blue);
 }
+
 .monitor-purple {
   background: var(--monitor-purple);
 }
@@ -236,4 +242,68 @@ a:hover {
 .search-wrapper:focus-within {
   border-color: rgba(72, 116, 236, 0.6);
   box-shadow: 0 0 0 3px rgba(72, 116, 236, 0.15);
+}
+
+/* =====================================
+   INPUTS & SELECT - ENTERPRISE STYLE
+===================================== */
+.form-control,
+.form-select {
+  background-color: var(--monitor-activity-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--monitor-activity-border);
+  border-radius: 12px;
+  height: 46px;
+  padding: 0.6rem 0.9rem;
+  transition: all 0.25s ease;
+}
+
+/* Placeholder */
+.form-control::placeholder {
+  color: rgba(150, 160, 180, 0.6);
+}
+
+[data-theme="light"] .form-control::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* Hover */
+.form-control:hover,
+.form-select:hover {
+  border-color: rgba(72, 116, 236, 0.4);
+}
+
+/* Focus */
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--monitor-activity-bg) !important;
+  color: var(--text-color) !important;
+  border-color: rgba(72, 116, 236, 0.65);
+  box-shadow: 0 0 0 3px rgba(72, 116, 236, 0.15);
+}
+
+/* Disabled */
+.form-control:disabled,
+.form-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Remove autofill amarelo do chrome */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--monitor-activity-bg) inset !important;
+  -webkit-text-fill-color: var(--text-color) !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Ajuste visual para dark */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  color-scheme: dark;
+}
+
+/* OPTION styling */
+.form-select option {
+  background-color: var(--monitor-activity-bg) !important;
+  color: var(--text-color) !important;
 }

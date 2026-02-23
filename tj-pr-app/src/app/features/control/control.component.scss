@@ -1,0 +1,106 @@
+.card-theme {
+    background: var(--monitor-activity-bg);
+    border: 1px solid var(--monitor-activity-border);
+    transition: background 0.3s ease, border 0.3s ease;
+}
+
+.section-icon {
+    color: white;
+}
+
+.icon-blue {
+    background: var(--monitor-blue);
+}
+
+.icon-green {
+    background: var(--monitor-green);
+}
+
+.icon-purple {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+}
+
+.photo-preview {
+    border: 2px dashed var(--monitor-activity-border);
+    min-height: 350px;
+}
+
+.photo-img {
+    max-height: 320px;
+    object-fit: cover;
+}
+
+.btn-green {
+    background: var(--monitor-green);
+    border: none;
+    transition: 0.2s ease;
+
+    &:hover {
+        filter: brightness(1.05);
+    }
+}
+
+.form-control {
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--monitor-activity-border);
+
+    &:focus {
+        background: transparent;
+        color: var(--text-color);
+        border-color: rgba(72, 116, 236, 0.6);
+        box-shadow: 0 0 0 3px rgba(72, 116, 236, 0.15);
+    }
+}
+
+.form-label {
+    color: var(--text-color);
+}
+
+/* =========================
+   OBSERVAÇÕES
+========================= */
+
+.textarea-custom {
+    resize: none;
+    min-height: 90px;
+    padding-top: 12px;
+}
+
+/* =========================
+   BOTÃO GRADIENTE
+========================= */
+
+.btn-gradient {
+    background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+    border: none;
+    border-radius: 12px;
+    transition: all 0.25s ease;
+
+    &:hover {
+        filter: brightness(1.05);
+        transform: translateY(-1px);
+    }
+}
+
+/* =========================
+   BOTÃO OUTLINE
+========================= */
+
+.btn-outline-theme {
+    border: 1px solid var(--monitor-activity-border);
+    color: var(--text-color);
+    background: transparent;
+    border-radius: 12px;
+    transition: all 0.25s ease;
+
+    &:hover {
+        background: var(--monitor-activity-bg);
+    }
+}
+
+/* Ícone escuro do card observação */
+.icon-dark {
+    background: var(--monitor-activity-border);
+    color: var(--text-color);
+}
