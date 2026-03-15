@@ -30,6 +30,7 @@
     "@angular/router": "^20.1.0",
     "@omnedia/ngx-gradient-text": "^4.0.1",
     "@omnedia/ngx-highlighter": "^4.0.1",
+    "ngx-mask": "^21.0.1",
     "rough-notation": "^0.5.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
