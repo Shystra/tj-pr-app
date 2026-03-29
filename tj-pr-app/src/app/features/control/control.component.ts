@@ -145,11 +145,15 @@ export class ControlComponent implements OnInit {
         this.cnaData = res;
 
         const partes = res.nome.split(' ');
+        const telefoneCompleto = res.ddd && res.telefone
+          ? `${res.ddd}${res.telefone}`
+          : res.telefone ?? '';
+
         this.form.patchValue({
           personGivenName: partes[0],
           personFamilyName: partes.slice(1).join(' '),
           email: res.email ?? '',
-          phoneNo: res.telefone ?? '',
+          phoneNo: telefoneCompleto,
           cpf: res.cpf ?? ''
         });
         this.isLoadingCna = false;
@@ -205,6 +209,7 @@ export class ControlComponent implements OnInit {
       personFamilyName: this.form.value.personFamilyName,
       gender: this.form.value.gender,
       orgIndexCode: this.form.value.orgIndexCode,
+      privilegeGroupId: this.selectedGroupId,
       phoneNo: this.form.value.phoneNo,
       email: this.form.value.email,
       remark: this.form.value.remark,

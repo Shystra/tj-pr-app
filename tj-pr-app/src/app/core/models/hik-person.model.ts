@@ -34,6 +34,7 @@ export interface HikPersonRequest {
   personGivenName: string;
   gender: number;
   orgIndexCode: string;
+  privilegeGroupId: string;
   remark?: string;
   phoneNo?: string;
   email?: string;
