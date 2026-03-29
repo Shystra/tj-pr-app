@@ -8,8 +8,9 @@ import { HikCentralService } from '../../core/service/hik-central.service';
 import { CnaService } from '../../core/service/cna.service';
 import { OnlyLettersInputDirective } from '../../shared/directives/only-letters.directive';
 import { OrgInfo } from '../../core/models/hik-organization.model';
-import { AccessType } from '../../core/models/hik-person.model';
+import { AccessType, HikPersonRequest } from '../../core/models/hik-person.model';
 import { PrivilegeGroupInfo } from '../../core/models/hik-privilege-group.model';
+import { AdvogadoCnaResponse } from '../../core/models/cna.model';
 
 @Component({
   selector: 'app-control',
@@ -35,6 +36,9 @@ export class ControlComponent implements OnInit {
   isLoadingCna = false;
   isLoadingOrgs = false;
   isLoadingGroups = false;
+  oabSemUf = false;
+  cnaData: AdvogadoCnaResponse | null = null;
+  selectedGroupId = '';
 
   constructor(
     private fb: FormBuilder,
@@ -54,8 +58,8 @@ export class ControlComponent implements OnInit {
     this.form = this.fb.group({
       tipoPessoa: ['VISITANTE', Validators.required],
       cpf: [''],
-      oab: [''],
-      uf: [''],
+      oab: ['', Validators.required],
+      uf: ['', Validators.required],
       accessType: [AccessType.Visitor, Validators.required],
       personGivenName: ['', Validators.required],
       personFamilyName: ['', Validators.required],
@@ -122,14 +126,9 @@ export class ControlComponent implements OnInit {
     });
   }
 
-  onGroupChange(groupId: string, checked: boolean) {
-    const current: string[] = this.form.get('faceGroupIndexCode')?.value ?? [];
-
-    const updated = checked
-      ? [...current, groupId]
-      : current.filter(id => id !== groupId);
-
-    this.form.patchValue({ faceGroupIndexCode: updated });
+  onGroupChange(groupId: string) {
+    this.selectedGroupId = groupId;
+    this.form.patchValue({ faceGroupIndexCode: groupId ? [groupId] : [] });
   }
 
   isGroupSelected(groupId: string): boolean {
@@ -139,17 +138,21 @@ export class ControlComponent implements OnInit {
 
   consultarCna() {
     const { uf, oab } = this.form.value;
-    if (!uf || !oab) return;
+    if (!uf || !oab)
+      return;
 
     this.isLoadingCna = true;
     this.cnaService.consultarAdvogado(uf, oab).subscribe({
       next: (res) => {
+        this.cnaData = res;
+
         const partes = res.nome.split(' ');
         this.form.patchValue({
           personGivenName: partes[0],
           personFamilyName: partes.slice(1).join(' '),
           email: res.email ?? '',
-          phoneNo: res.telefone ?? ''
+          phoneNo: res.telefone ?? '',
+          cpf: res.cpf ?? ''
         });
         this.isLoadingCna = false;
       },
@@ -187,21 +190,38 @@ export class ControlComponent implements OnInit {
     };
   }
 
+  onOabFocus() {
+    this.oabSemUf = !this.form.value.uf;
+  }
+
   registrar() {
     if (this.form.invalid) return;
 
     this.isLoading = true;
     const { beginTime, endTime } = this.resolverDatas();
+    const isAdvogado = this.form.value.tipoPessoa === 'ADVOGADO';
 
-    const payload = {
-      ...this.form.value,
+    const payload: HikPersonRequest = {
+      accessType: this.form.value.accessType,
+      personGivenName: this.form.value.personGivenName,
+      personFamilyName: this.form.value.personFamilyName,
+      gender: this.form.value.gender,
+      orgIndexCode: this.form.value.orgIndexCode,
+      phoneNo: this.form.value.phoneNo,
+      email: this.form.value.email,
+      remark: this.form.value.remark,
+      faceData: this.form.value.faceData,
+      faceGroupIndexCode: this.form.value.faceGroupIndexCode,
       beginTime,
-      endTime
+      endTime,
+      advogadoInfo: isAdvogado ? this.cnaData : null
     };
 
     this.hikService.cadastrarPessoa(payload).subscribe({
       next: () => {
         this.isLoading = false;
+        this.cnaData = null;
+        this.selectedGroupId = '';
         this.form.reset({ tipoPessoa: 'VISITANTE', tipoAcesso: 'PERMANENTE' });
         this.fotoPreview = null;
       },

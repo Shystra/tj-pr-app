@@ -18,26 +18,28 @@
                 <option value="ADVOGADO">Advogado</option>
               </select>
             </div>
-            <div class="col-md-4">
-              <label class="form-label">CPF <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="cpf" mask="000.000.000-00"
-                placeholder="000.000.000-00">
-            </div>
           </div>
 
           @if (form.value.tipoPessoa === 'ADVOGADO') {
           <div class="row g-3 mt-2">
             <div class="col-md-3">
-              <label class="form-label">UF</label>
+              <label class="form-label">UF <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="uf" maxlength="2"
-                style="text-transform: uppercase">
+                style="text-transform: uppercase" placeholder="UF">
             </div>
             <div class="col-md-3">
-              <label class="form-label">OAB</label>
-              <input type="text" class="form-control" formControlName="oab">
+              <label class="form-label">OAB <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="oab" placeholder="Nº OAB" (focus)="onOabFocus()">
+              @if (oabSemUf) {
+              <div class="text-danger small mt-1">
+                <i class="bi bi-exclamation-circle me-1"></i>
+                Preencha o campo UF primeiro.
+              </div>
+              }
             </div>
-            <div class="col-md-3 d-flex align-items-end">
-              <button type="button" class="btn btn-primary w-100" (click)="consultarCna()" [disabled]="isLoadingCna">
+            <div class="col-md-3 d-flex align-items-start pt-2">
+              <button type="button" class="btn btn-primary w-100 mt-4" (click)="consultarCna()"
+                [disabled]="isLoadingCna || !form.value.uf || !form.value.oab">
                 @if (isLoadingCna) {
                 <span class="spinner-border spinner-border-sm me-1"></span>
                 Consultando...
@@ -50,11 +52,16 @@
           }
 
           <div class="row g-3 mt-2">
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <label class="form-label">CPF</label>
+              <input type="text" class="form-control" formControlName="cpf" mask="000.000.000-00"
+                placeholder="000.000.000-00">
+            </div>
+            <div class="col-md-4">
               <label class="form-label">Nome <span class="text-danger">*</span></label>
               <input onlyLettersInput type="text" class="form-control" formControlName="personGivenName">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label">Sobrenome <span class="text-danger">*</span></label>
               <input onlyLettersInput type="text" class="form-control" formControlName="personFamilyName">
             </div>
@@ -138,13 +145,9 @@
             </div>
             }
 
-            <!-- Grupos de Face -->
+            <!-- Departamento (select único) -->
             <div class="col-12 mt-2">
-              <label class="form-label">
-                Grupos de Acesso (Face)
-                <!-- <span class="text-danger">*</span> -->
-              </label>
-
+              <label class="form-label">Departamento</label>
               @if (isLoadingGroups) {
               <div class="d-flex align-items-center gap-2 text-muted">
                 <span class="spinner-border spinner-border-sm"></span>
@@ -156,43 +159,16 @@
                 <span class="small">Nenhum grupo de acesso encontrado.</span>
               </div>
               } @else {
-              <div class="row g-2 mt-1">
+              <select class="form-select" [value]="selectedGroupId" (change)="onGroupChange($any($event.target).value)">
+                <option value="">Selecione um departamento</option>
                 @for (group of privilegeGroups; track group.privilegeGroupId) {
-                <div class="col-md-4">
-                  <div class="form-check group-check-card p-3 rounded-3 border"
-                    [class.selected]="isGroupSelected(group.privilegeGroupId!)">
-                    <input class="form-check-input" type="checkbox" [id]="'group-' + group.privilegeGroupId"
-                      [checked]="isGroupSelected(group.privilegeGroupId!)"
-                      (change)="onGroupChange(group.privilegeGroupId!, $any($event.target).checked)">
-                    <label class="form-check-label w-100 cursor-pointer" [for]="'group-' + group.privilegeGroupId">
-                      <span class="fw-semibold d-block">{{ group.privilegeGroupName }}</span>
-                      @if (group.description) {
-                      <span class="small text-muted">{{ group.description }}</span>
-                      }
-                      @if (group.timeSchedule?.name) {
-                      <span class="badge bg-secondary mt-1">
-                        <i class="bi bi-clock me-1"></i>
-                        {{ group.timeSchedule!.name }}
-                      </span>
-                      }
-                    </label>
-                  </div>
-                </div>
+                <option [value]="group.privilegeGroupId">{{ group.privilegeGroupName }}</option>
                 }
-              </div>
-
-              @if (form.get('faceGroupIndexCode')?.invalid && form.get('faceGroupIndexCode')?.touched) {
-              <div class="text-danger small mt-1">
-                <i class="bi bi-exclamation-circle me-1"></i>
-                Selecione ao menos um grupo de acesso.
-              </div>
-              }
+              </select>
               }
             </div>
-
           </div>
         </div>
-
       </div>
 
       <div class="col-lg-4">
