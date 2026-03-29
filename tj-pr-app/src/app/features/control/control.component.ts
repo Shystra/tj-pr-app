@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
 import { NgxMaskDirective } from 'ngx-mask';
 import { HikCentralService } from '../../core/service/hik-central.service';
 import { CnaService } from '../../core/service/cna.service';
@@ -16,7 +15,6 @@ import { AdvogadoCnaResponse } from '../../core/models/cna.model';
   selector: 'app-control',
   standalone: true,
   imports: [
-    TranslateModule,
     CommonModule,
     ReactiveFormsModule,
     MatIconModule,
