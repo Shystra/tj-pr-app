@@ -39,6 +39,10 @@ export class ControlComponent implements OnInit {
     private cnaService: CnaService
   ) { }
 
+  get isPermanente(): boolean {
+    return this.form.get('tipoAcesso')?.value === 'PERMANENTE';
+  }
+
   ngOnInit() {
     this.form = this.fb.group({
       tipoPessoa: ['VISITANTE', Validators.required],
@@ -55,11 +59,33 @@ export class ControlComponent implements OnInit {
       remark: [''],
       faceData: [''],
       faceGroupIndexCode: [[]],
+      tipoAcesso: ['PERMANENTE', Validators.required],
       beginTime: [''],
       endTime: ['']
     });
 
+    this.ouvirTipoAcesso();
     this.loadOrganizations();
+  }
+
+  private ouvirTipoAcesso() {
+    this.form.get('tipoAcesso')?.valueChanges.subscribe(valor => {
+      const beginControl = this.form.get('beginTime');
+      const endControl = this.form.get('endTime');
+
+      if (valor === 'TEMPORARIO') {
+        beginControl?.setValidators(Validators.required);
+        endControl?.setValidators(Validators.required);
+      } else {
+        beginControl?.clearValidators();
+        endControl?.clearValidators();
+        beginControl?.setValue('');
+        endControl?.setValue('');
+      }
+
+      beginControl?.updateValueAndValidity();
+      endControl?.updateValueAndValidity();
+    });
   }
 
   loadOrganizations() {
@@ -111,18 +137,36 @@ export class ControlComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  private resolverDatas(): { beginTime: string; endTime: string } {
+    if (this.isPermanente) {
+      return {
+        beginTime: new Date().toISOString(),
+        endTime: new Date('2099-12-31T23:59:59').toISOString()
+      };
+    }
+
+    return {
+      beginTime: new Date(this.form.value.beginTime).toISOString(),
+      endTime: new Date(this.form.value.endTime).toISOString()
+    };
+  }
+
   registrar() {
     if (this.form.invalid) return;
 
     this.isLoading = true;
-    this.form.patchValue({
-      beginTime: new Date().toISOString()
-    });
+    const { beginTime, endTime } = this.resolverDatas();
 
-    this.hikService.cadastrarPessoa(this.form.value).subscribe({
+    const payload = {
+      ...this.form.value,
+      beginTime,
+      endTime
+    };
+
+    this.hikService.cadastrarPessoa(payload).subscribe({
       next: () => {
         this.isLoading = false;
-        this.form.reset();
+        this.form.reset({ tipoPessoa: 'VISITANTE', tipoAcesso: 'PERMANENTE' });
         this.fotoPreview = null;
       },
       error: () => {
@@ -131,4 +175,7 @@ export class ControlComponent implements OnInit {
     });
   }
 
+  get hoje(): string {
+    return new Date().toISOString().slice(0, 16);
+  }
 }

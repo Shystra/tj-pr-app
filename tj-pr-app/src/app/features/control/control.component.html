@@ -20,33 +20,34 @@
             </div>
             <div class="col-md-4">
               <label class="form-label">CPF <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="cpf" mask="000.000.000-00"
-                placeholder="000.000.000-00">
+              <input type="text" class="form-control" formControlName="cpf"
+                mask="000.000.000-00" placeholder="000.000.000-00">
             </div>
           </div>
 
           @if (form.value.tipoPessoa === 'ADVOGADO') {
-          <div class="row g-3 mt-2">
-            <div class="col-md-3">
-              <label class="form-label">UF</label>
-              <input type="text" class="form-control" formControlName="uf" maxlength="2"
-                style="text-transform: uppercase">
+            <div class="row g-3 mt-2">
+              <div class="col-md-3">
+                <label class="form-label">UF</label>
+                <input type="text" class="form-control" formControlName="uf"
+                  maxlength="2" style="text-transform: uppercase">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">OAB</label>
+                <input type="text" class="form-control" formControlName="oab">
+              </div>
+              <div class="col-md-3 d-flex align-items-end">
+                <button type="button" class="btn btn-primary w-100"
+                  (click)="consultarCna()" [disabled]="isLoadingCna">
+                  @if (isLoadingCna) {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    Consultando...
+                  } @else {
+                    Consultar CNA
+                  }
+                </button>
+              </div>
             </div>
-            <div class="col-md-3">
-              <label class="form-label">OAB</label>
-              <input type="text" class="form-control" formControlName="oab">
-            </div>
-            <div class="col-md-3 d-flex align-items-end">
-              <button type="button" class="btn btn-primary w-100" (click)="consultarCna()" [disabled]="isLoadingCna">
-                @if (isLoadingCna) {
-                <span class="spinner-border spinner-border-sm me-1"></span>
-                Consultando...
-                } @else {
-                Consultar CNA
-                }
-              </button>
-            </div>
-          </div>
           }
 
           <div class="row g-3 mt-2">
@@ -60,8 +61,8 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Telefone</label>
-              <input type="text" class="form-control" formControlName="phoneNo" mask="(00) 00000-0000||(00) 0000-0000"
-                placeholder="(00) 00000-0000">
+              <input type="text" class="form-control" formControlName="phoneNo"
+                mask="(00) 00000-0000||(00) 0000-0000" placeholder="(00) 00000-0000">
             </div>
             <div class="col-md-6">
               <label class="form-label">Email</label>
@@ -75,17 +76,72 @@
                   {{ isLoadingOrgs ? 'Carregando...' : 'Selecione' }}
                 </option>
                 @for (org of organizations; track org.orgIndexCode) {
-                <option [value]="org.orgIndexCode">{{ org.orgName }}</option>
+                  <option [value]="org.orgIndexCode">{{ org.orgName }}</option>
                 }
               </select>
             </div>
 
             <div class="col-12">
               <label class="form-label">Observações</label>
-              <textarea class="form-control" rows="6" formControlName="remark"></textarea>
+              <textarea class="form-control" rows="4" formControlName="remark"></textarea>
             </div>
           </div>
         </div>
+
+        <!-- Card Período de Acesso -->
+        <div class="card card-theme shadow-sm border-0 rounded-4 p-4 mt-4">
+          <div class="d-flex align-items-center mb-3">
+            <div class="me-2 p-2 rounded-3 section-icon icon-blue">
+              <i class="bi bi-calendar-check"></i>
+            </div>
+            <h5 class="fw-semibold mb-0">Período de Acesso</h5>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-12">
+              <label class="form-label">Tipo de Acesso <span class="text-danger">*</span></label>
+              <div class="d-flex gap-3 mt-1">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" formControlName="tipoAcesso"
+                    id="tipoPermanente" value="PERMANENTE">
+                  <label class="form-check-label" for="tipoPermanente">
+                    <i class="bi bi-infinity me-1"></i>
+                    Acesso Permanente
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" formControlName="tipoAcesso"
+                    id="tipoTemporario" value="TEMPORARIO">
+                  <label class="form-check-label" for="tipoTemporario">
+                    <i class="bi bi-clock me-1"></i>
+                    Acesso Temporário
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            @if (!isPermanente) {
+              <div class="col-md-6">
+                <label class="form-label">Data de Início <span class="text-danger">*</span></label>
+                <input type="datetime-local" class="form-control" formControlName="beginTime"
+                  [min]="hoje">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Data de Fim <span class="text-danger">*</span></label>
+                <input type="datetime-local" class="form-control" formControlName="endTime"
+                  [min]="form.value.beginTime || hoje">
+              </div>
+            } @else {
+              <div class="col-12">
+                <div class="alert alert-info d-flex align-items-center gap-2 mb-0 py-2">
+                  <i class="bi bi-info-circle"></i>
+                  <span class="small">O acesso será liberado a partir de agora sem data de expiração.</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
       </div>
 
       <div class="col-lg-4">
@@ -98,12 +154,12 @@
           </div>
           <div class="flex-grow-1 d-flex align-items-center justify-content-center rounded-4 mb-3 photo-preview">
             @if (fotoPreview) {
-            <img [src]="fotoPreview" class="img-fluid rounded-3">
+              <img [src]="fotoPreview" class="img-fluid rounded-3">
             } @else {
-            <div class="text-center opacity-75">
-              <i class="bi bi-camera fs-1"></i>
-              <p class="mt-2 mb-0">Nenhuma foto capturada</p>
-            </div>
+              <div class="text-center opacity-75">
+                <i class="bi bi-camera fs-1"></i>
+                <p class="mt-2 mb-0">Nenhuma foto capturada</p>
+              </div>
             }
           </div>
           <button type="button" class="btn btn-green w-100 text-white" (click)="fileInput.click()">
@@ -119,14 +175,15 @@
       <button type="submit" class="btn btn-gradient px-5 py-3 text-white fw-semibold shadow-sm"
         [disabled]="form.invalid || isLoading">
         @if (isLoading) {
-        <span class="spinner-border spinner-border-sm me-2"></span>
-        Salvando...
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          Salvando...
         } @else {
-        <i class="bi bi-check-circle me-2"></i>
-        Registrar Acesso
+          <i class="bi bi-check-circle me-2"></i>
+          Registrar Acesso
         }
       </button>
-      <button type="button" class="btn btn-outline-theme px-4 py-3" (click)="form.reset()"
+      <button type="button" class="btn btn-outline-theme px-4 py-3"
+        (click)="form.reset({ tipoPessoa: 'VISITANTE', tipoAcesso: 'PERMANENTE' })"
         [disabled]="form.pristine || isLoading">
         Limpar Formulário
       </button>

@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
 import { TranslateModule } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { AccessControlService } from '../../core/service/access-control.service';
-import { AccessEventDto, AccessEventType, AccessResultType } from '../../core/models/access-event.model';
+import { AccessEventDto, AccessEventFilter, AccessEventType, AccessResultType, AuthenticationMethodType } from '../../core/models/access-event.model';
 
 @Component({
   selector: 'app-monitoring',
@@ -12,20 +13,30 @@ import { AccessEventDto, AccessEventType, AccessResultType } from '../../core/mo
   imports: [
     TranslateModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatPaginatorModule
   ],
   templateUrl: './monitoring.component.html',
   styleUrl: './monitoring.component.scss',
 })
-export class MonitoringComponent implements OnInit, OnDestroy {
+export class MonitoringComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   private destroy$ = new Subject<void>();
+  private searchSubject$ = new Subject<string>();
 
   activities: AccessEventDto[] = [];
   searchTerm = '';
   isLoading = false;
   totalHoje = 0;
   totalAtivos = 0;
+  totalEventos = 0;
+  totalNegados = 0;
+  totalBiometria = 0;
+
+  pageIndex = 0;
+  pageSize = 20;
 
   readonly AccessEventType = AccessEventType;
   readonly AccessResultType = AccessResultType;
@@ -34,6 +45,17 @@ export class MonitoringComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.carregarEventos();
+    this.ouvirBusca();
+  }
+
+  ngAfterViewInit() {
+    this.paginator.page
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: PageEvent) => {
+        this.pageIndex = event.pageIndex;
+        this.pageSize = event.pageSize;
+        this.carregarEventos();
+      });
   }
 
   ngOnDestroy() {
@@ -41,24 +63,39 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  carregarEventos() {
-    this.isLoading = true;
+  private buildFilter(): AccessEventFilter {
     const hoje = new Date();
     const inicioDia = new Date(hoje.setHours(0, 0, 0, 0)).toISOString();
 
-    this.accessControlService.listarEventos({
-      page: 1,
-      pageSize: 20,
-      startDate: inicioDia
-    })
+    return {
+      page: this.pageIndex + 1, // backend é 1-based
+      pageSize: this.pageSize,
+      startDate: inicioDia,
+      personName: this.searchTerm || undefined
+    };
+  }
+
+  carregarEventos() {
+    this.isLoading = true;
+
+    this.accessControlService.listarEventos(this.buildFilter())
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
           this.activities = res.items;
+          this.totalEventos = res.total;
           this.totalHoje = res.total;
           this.totalAtivos = res.items.filter(
-            e => e.eventType === AccessEventType.Entry && e.accessResult === AccessResultType.Success
+            e => e.eventType === AccessEventType.Entry &&
+              e.accessResult === AccessResultType.Success
           ).length;
+          this.totalNegados = res.items.filter(
+            e => e.accessResult === AccessResultType.Denied
+          ).length;
+          this.totalBiometria = res.items.filter(
+            e => e.authenticationMethod === AuthenticationMethodType.Face
+          ).length;
+
           this.isLoading = false;
         },
         error: () => {
@@ -67,24 +104,25 @@ export class MonitoringComponent implements OnInit, OnDestroy {
       });
   }
 
+  ouvirBusca() {
+    this.searchSubject$
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.pageIndex = 0;
+        if (this.paginator) {
+          this.paginator.firstPage();
+        }
+        this.carregarEventos();
+      });
+  }
+
   buscar(term: string) {
     this.searchTerm = term;
-    this.isLoading = true;
-    this.accessControlService.listarEventos({
-      page: 1,
-      pageSize: 20,
-      personName: term || undefined
-    })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          this.activities = res.items;
-          this.isLoading = false;
-        },
-        error: () => {
-          this.isLoading = false;
-        }
-      });
+    this.searchSubject$.next(term);
   }
 
   getInitials(name: string): string {

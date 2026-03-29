@@ -1,7 +1,7 @@
 <div class="container-fluid mt-4">
 
   <div class="row g-4 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card monitor-card monitor-green shadow-sm border-0 rounded-4">
         <div class="card-body d-flex justify-content-between align-items-start">
           <div>
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card monitor-card monitor-blue shadow-sm border-0 rounded-4">
         <div class="card-body d-flex justify-content-between align-items-start">
           <div>
@@ -29,15 +29,29 @@
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
+      <div class="card monitor-card monitor-red shadow-sm border-0 rounded-4">
+        <div class="card-body d-flex justify-content-between align-items-start">
+          <div>
+            <p class="small mb-1 opacity-75">Acessos Negados</p>
+            <h2 class="fw-bold mb-0">{{ totalNegados }}</h2>
+          </div>
+          <div class="monitor-icon d-flex align-items-center justify-content-center">
+            <i class="bi bi-slash-circle fs-5"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
       <div class="card monitor-card monitor-purple shadow-sm border-0 rounded-4">
         <div class="card-body d-flex justify-content-between align-items-start">
           <div>
-            <p class="small mb-1 opacity-75">Tempo Médio</p>
-            <h2 class="fw-bold mb-0">145 <span class="fs-6">min</span></h2>
+            <p class="small mb-1 opacity-75">Por Biometria</p>
+            <h2 class="fw-bold mb-0">{{ totalBiometria }}</h2>
           </div>
           <div class="monitor-icon d-flex align-items-center justify-content-center">
-            <i class="bi bi-clock fs-5"></i>
+            <i class="bi bi-fingerprint fs-5"></i>
           </div>
         </div>
       </div>
@@ -48,8 +62,8 @@
     <div class="col-lg-5 col-md-7">
       <div class="search-wrapper d-flex align-items-center px-3">
         <i class="bi bi-search me-2"></i>
-        <input type="text" class="search-input flex-grow-1" placeholder="Buscar por nome..."
-          [value]="searchTerm" (input)="buscar($any($event.target).value)" />
+        <input type="text" class="search-input flex-grow-1" placeholder="Buscar por nome..." [value]="searchTerm"
+          (input)="buscar($any($event.target).value)" />
       </div>
     </div>
   </div>
@@ -97,6 +111,11 @@
         </div>
         }
       </div>
+
+      <mat-paginator [length]="totalEventos" [pageSize]="pageSize" [pageIndex]="pageIndex"
+        [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+      </mat-paginator>
+
     </div>
   </div>
   } @else {
