@@ -1,9 +1,6 @@
-export enum AccessType {
-  Employee = 0,
-  Visitor = 1
-}
-
-export interface TOAdvogado {
+export interface AdvogadoCnaResponse {
+  // O contrato retorna 200 sem schema definido
+  // Tipagem baseada no TOAdvogado já existente
   bairro: string;
   cep: string;
   cidade: string;
@@ -26,20 +23,4 @@ export interface TOAdvogado {
   telefone: string;
   tipoInscricao: string;
   uf: string;
-}
-
-export interface HikPersonRequest {
-  accessType: AccessType;
-  personFamilyName: string;
-  personGivenName: string;
-  gender: number;
-  orgIndexCode: string;
-  remark?: string;
-  phoneNo?: string;
-  email?: string;
-  faceData: string;
-  faceGroupIndexCode: string[];
-  beginTime: string;
-  endTime: string;
-  advogadoInfo: TOAdvogado | null;
 }

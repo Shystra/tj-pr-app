@@ -1,0 +1,758 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Access Control API",
+    "description": "Access Control API",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:7233/"
+    }
+  ],
+  "paths": {
+    "/api/v1/access-events": {
+      "get": {
+        "tags": [
+          "Access Control"
+        ],
+        "summary": "Lista eventos de acesso (tempo real / histórico)",
+        "description": "Retorna eventos de entrada, saída e acessos negados com paginação e filtros",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "personName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AccessEventType"
+            }
+          },
+          {
+            "name": "deviceName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResponseOfAccessEventDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/advogados/{uf}/{oab}": {
+      "get": {
+        "tags": [
+          "CNA"
+        ],
+        "summary": "Consulta advogado no CNA",
+        "description": "Consulta dados do advogado diretamente no CNA da OAB",
+        "parameters": [
+          {
+            "name": "uf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "oab",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hik-central/persons": {
+      "post": {
+        "tags": [
+          "HikCentral"
+        ],
+        "summary": "Cadastrar pessoa no HikCentral",
+        "description": "Cria uma pessoa no HikCentral e cadastra a face biométrica.\r\n\r\nFluxo executado:\r\n1. Cria a pessoa no sistema.\r\n2. Cadastra a foto facial no grupo informado.\r\n\r\nA imagem deve ser enviada em Base64.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CriaPessoaInputDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hik-central/organizations": {
+      "get": {
+        "tags": [
+          "HikCentral"
+        ],
+        "summary": "Listar organizações do HikCentral",
+        "description": "Retorna as organizações cadastradas no HikCentral.\r\n\r\nPermite buscar por nome e paginação.",
+        "parameters": [
+          {
+            "name": "orgName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrgListResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hik-central/privilege-groups": {
+      "get": {
+        "tags": [
+          "HikCentral"
+        ],
+        "summary": "Listar grupos de privilégio (Access Levels)",
+        "description": "Retorna os grupos de privilégio (Access Levels) do HikCentral.\r\n\r\nTipos:\r\n1 - Access Control\r\n2 - Visitor",
+        "parameters": [
+          {
+            "name": "pageNo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivilegeGroupPage"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccessEventDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thumbnail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "personId": {
+            "type": "string"
+          },
+          "personName": {
+            "type": "string"
+          },
+          "organization": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "doorName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "accessType": {
+            "$ref": "#/components/schemas/AccessPersonType"
+          },
+          "eventType": {
+            "$ref": "#/components/schemas/AccessEventType"
+          },
+          "accessResult": {
+            "$ref": "#/components/schemas/AccessResultType"
+          },
+          "eventTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deviceName": {
+            "type": "string"
+          },
+          "authenticationMethod": {
+            "$ref": "#/components/schemas/AuthenticationMethodType"
+          }
+        }
+      },
+      "AccessEventType": {
+        "type": "integer"
+      },
+      "AccessPersonType": {
+        "type": "integer"
+      },
+      "AccessResultType": {
+        "type": "integer"
+      },
+      "AccessType": {
+        "type": "integer"
+      },
+      "AuthenticationMethodType": {
+        "type": "integer"
+      },
+      "CriaPessoaInputDto": {
+        "type": "object",
+        "properties": {
+          "accessType": {
+            "$ref": "#/components/schemas/AccessType"
+          },
+          "personFamilyName": {
+            "type": "string"
+          },
+          "personGivenName": {
+            "type": "string"
+          },
+          "gender": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "orgIndexCode": {
+            "type": "string"
+          },
+          "remark": {
+            "type": "string"
+          },
+          "phoneNo": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "faceData": {
+            "type": "string"
+          },
+          "faceGroupIndexCode": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "beginTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "advogadoInfo": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TOAdvogado"
+              }
+            ]
+          }
+        }
+      },
+      "OrgInfo": {
+        "type": "object",
+        "properties": {
+          "orgIndexCode": {
+            "type": "string"
+          },
+          "orgName": {
+            "type": "string"
+          },
+          "parentOrgIndexCode": {
+            "type": "string"
+          }
+        }
+      },
+      "OrgListResult": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "pageNo": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "pageSize": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "list": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrgInfo"
+            }
+          }
+        }
+      },
+      "PagedResponseOfAccessEventDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "pageSize": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "total": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccessEventDto"
+            }
+          }
+        }
+      },
+      "PrivilegeGroupInfo": {
+        "type": "object",
+        "properties": {
+          "privilegeGroupId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "privilegeGroupName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "timeSchedule": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/TimeScheduleInfo"
+              }
+            ]
+          }
+        }
+      },
+      "PrivilegeGroupPage": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "pageNo": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "pageSize": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "list": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/PrivilegeGroupInfo"
+            }
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "TimeScheduleInfo": {
+        "type": "object",
+        "properties": {
+          "indexCode": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "TOAdvogado": {
+        "type": "object",
+        "properties": {
+          "bairro": {
+            "type": "string"
+          },
+          "cep": {
+            "type": "string"
+          },
+          "cidade": {
+            "type": "string"
+          },
+          "codigoSituacao": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "ddd": {
+            "type": "string"
+          },
+          "dataCpro": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "email": {
+            "type": "string"
+          },
+          "inscricao": {
+            "type": "string"
+          },
+          "logradouro": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "nomeMae": {
+            "type": "string"
+          },
+          "nomePai": {
+            "type": "string"
+          },
+          "nomeSocial": {
+            "type": "string"
+          },
+          "numero": {
+            "type": "string"
+          },
+          "numeroSeguranca": {
+            "type": "string"
+          },
+          "organizacao": {
+            "type": "string"
+          },
+          "situacao": {
+            "type": "string"
+          },
+          "sociedades": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
+          },
+          "tipoInscricao": {
+            "type": "string"
+          },
+          "uf": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Access Control"
+    },
+    {
+      "name": "CNA"
+    },
+    {
+      "name": "HikCentral"
+    }
+  ]
+}

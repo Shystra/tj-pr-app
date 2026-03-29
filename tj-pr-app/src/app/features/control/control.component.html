@@ -9,92 +9,80 @@
             </div>
             <h5 class="fw-semibold mb-0">Cadastro de Acesso</h5>
           </div>
+
           <div class="row g-3">
             <div class="col-md-4">
               <label class="form-label">Tipo de Pessoa</label>
               <select class="form-select" formControlName="tipoPessoa">
-                <option value="VISITANTE">
-                  Visitante
-                </option>
-                <option value="ADVOGADO">
-                  Advogado
-                </option>
+                <option value="VISITANTE">Visitante</option>
+                <option value="ADVOGADO">Advogado</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label">CPF</label>
+              <label class="form-label">CPF <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="cpf" mask="000.000.000-00"
                 placeholder="000.000.000-00">
             </div>
           </div>
-          <div class="row g-3 mt-2" *ngIf="form.value.tipoPessoa === 'ADVOGADO'">
+
+          @if (form.value.tipoPessoa === 'ADVOGADO') {
+          <div class="row g-3 mt-2">
             <div class="col-md-3">
-              <label class="form-label">
-                UF
-              </label>
+              <label class="form-label">UF</label>
               <input type="text" class="form-control" formControlName="uf" maxlength="2"
                 style="text-transform: uppercase">
             </div>
             <div class="col-md-3">
-              <label class="form-label">
-                OAB
-              </label>
+              <label class="form-label">OAB</label>
               <input type="text" class="form-control" formControlName="oab">
             </div>
             <div class="col-md-3 d-flex align-items-end">
-              <button type="button" class="btn btn-primary w-100" (click)="consultarCna()">
+              <button type="button" class="btn btn-primary w-100" (click)="consultarCna()" [disabled]="isLoadingCna">
+                @if (isLoadingCna) {
+                <span class="spinner-border spinner-border-sm me-1"></span>
+                Consultando...
+                } @else {
                 Consultar CNA
+                }
               </button>
             </div>
           </div>
+          }
+
           <div class="row g-3 mt-2">
             <div class="col-md-6">
-              <label class="form-label">
-                Nome
-                <span class="text-danger">*</span>
-              </label>
+              <label class="form-label">Nome <span class="text-danger">*</span></label>
               <input onlyLettersInput type="text" class="form-control" formControlName="personGivenName">
             </div>
             <div class="col-md-6">
-              <label class="form-label">
-                Sobrenome
-                <span class="text-danger">*</span>
-              </label>
+              <label class="form-label">Sobrenome <span class="text-danger">*</span></label>
               <input onlyLettersInput type="text" class="form-control" formControlName="personFamilyName">
             </div>
             <div class="col-md-6">
-              <label class="form-label">
-                Telefone
-              </label>
+              <label class="form-label">Telefone</label>
               <input type="text" class="form-control" formControlName="phoneNo" mask="(00) 00000-0000||(00) 0000-0000"
                 placeholder="(00) 00000-0000">
             </div>
             <div class="col-md-6">
-              <label class="form-label">
-                Email
-              </label>
+              <label class="form-label">Email</label>
               <input type="email" class="form-control" formControlName="email">
             </div>
+
             <div class="col-md-12">
-              <label class="form-label">
-                Organização
-              </label>
-              <select class="form-select" formControlName="orgIndexCode">
+              <label class="form-label">Organização <span class="text-danger">*</span></label>
+              <select class="form-select" formControlName="orgIndexCode" [disabled]="isLoadingOrgs">
                 <option value="">
-                  Selecione
+                  {{ isLoadingOrgs ? 'Carregando...' : 'Selecione' }}
                 </option>
-                <!-- <option *ngFor="let org of organizations" [value]="org.orgIndexCode">
-                  {{ org.orgName }}
-                </option> -->
-                <option>Teste</option>
+                @for (org of organizations; track org.orgIndexCode) {
+                <option [value]="org.orgIndexCode">{{ org.orgName }}</option>
+                }
               </select>
             </div>
+
             <div class="col-12">
-              <label class="form-label">
-                Observações
-              </label>
-              <textarea class="form-control" rows="6" formControlName="remark">
-              </textarea>
+              <label class="form-label">Observações</label>
+              <textarea class="form-control" rows="6" formControlName="remark"></textarea>
             </div>
           </div>
         </div>
@@ -109,17 +97,14 @@
             <h5 class="fw-semibold mb-0">Foto</h5>
           </div>
           <div class="flex-grow-1 d-flex align-items-center justify-content-center rounded-4 mb-3 photo-preview">
-            <ng-container *ngIf="fotoPreview; else semFoto">
-              <img [src]="fotoPreview" class="img-fluid rounded-3">
-            </ng-container>
-            <ng-template #semFoto>
-              <div class="text-center opacity-75">
-                <i class="bi bi-camera fs-1"></i>
-                <p class="mt-2 mb-0">
-                  Nenhuma foto capturada
-                </p>
-              </div>
-            </ng-template>
+            @if (fotoPreview) {
+            <img [src]="fotoPreview" class="img-fluid rounded-3">
+            } @else {
+            <div class="text-center opacity-75">
+              <i class="bi bi-camera fs-1"></i>
+              <p class="mt-2 mb-0">Nenhuma foto capturada</p>
+            </div>
+            }
           </div>
           <button type="button" class="btn btn-green w-100 text-white" (click)="fileInput.click()">
             <i class="bi bi-camera me-2"></i>
@@ -133,14 +118,13 @@
     <div class="d-flex justify-content-end mt-4 gap-3">
       <button type="submit" class="btn btn-gradient px-5 py-3 text-white fw-semibold shadow-sm"
         [disabled]="form.invalid || isLoading">
-        <ng-container *ngIf="!isLoading">
-          <i class="bi bi-check-circle me-2"></i>
-          Registrar Acesso
-        </ng-container>
-        <ng-container *ngIf="isLoading">
-          <span class="spinner-border spinner-border-sm me-2"></span>
-          Salvando...
-        </ng-container>
+        @if (isLoading) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Salvando...
+        } @else {
+        <i class="bi bi-check-circle me-2"></i>
+        Registrar Acesso
+        }
       </button>
       <button type="button" class="btn btn-outline-theme px-4 py-3" (click)="form.reset()"
         [disabled]="form.pristine || isLoading">

@@ -1,15 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-
-interface Activity {
-  name: string;
-  type: 'Entrada' | 'Saída';
-  location: string;
-  time: string;
-  cardNumber: string;
-}
+import { Subject, takeUntil } from 'rxjs';
+import { AccessControlService } from '../../core/service/access-control.service';
+import { AccessEventDto, AccessEventType, AccessResultType } from '../../core/models/access-event.model';
 
 @Component({
   selector: 'app-monitoring',
@@ -22,31 +17,75 @@ interface Activity {
   templateUrl: './monitoring.component.html',
   styleUrl: './monitoring.component.scss',
 })
-export class MonitoringComponent {
+export class MonitoringComponent implements OnInit, OnDestroy {
 
-  activities: Activity[] = [
-    {
-      name: 'Pedro Oliveira',
-      type: 'Entrada',
-      location: '3º Andar - Presidência',
-      time: 'Agora',
-      cardNumber: '#1877'
-    },
-    {
-      name: 'Maria Souza',
-      type: 'Saída',
-      location: '2º Andar - Administrativo',
-      time: '5 min atrás',
-      cardNumber: '#2214'
-    },
-    {
-      name: 'João Pereira',
-      type: 'Entrada',
-      location: 'Térreo - Recepção',
-      time: '12 min atrás',
-      cardNumber: '#3321'
-    }
-  ];
+  private destroy$ = new Subject<void>();
+
+  activities: AccessEventDto[] = [];
+  searchTerm = '';
+  isLoading = false;
+  totalHoje = 0;
+  totalAtivos = 0;
+
+  readonly AccessEventType = AccessEventType;
+  readonly AccessResultType = AccessResultType;
+
+  constructor(private accessControlService: AccessControlService) { }
+
+  ngOnInit() {
+    this.carregarEventos();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  carregarEventos() {
+    this.isLoading = true;
+    const hoje = new Date();
+    const inicioDia = new Date(hoje.setHours(0, 0, 0, 0)).toISOString();
+
+    this.accessControlService.listarEventos({
+      page: 1,
+      pageSize: 20,
+      startDate: inicioDia
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.activities = res.items;
+          this.totalHoje = res.total;
+          this.totalAtivos = res.items.filter(
+            e => e.eventType === AccessEventType.Entry && e.accessResult === AccessResultType.Success
+          ).length;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        }
+      });
+  }
+
+  buscar(term: string) {
+    this.searchTerm = term;
+    this.isLoading = true;
+    this.accessControlService.listarEventos({
+      page: 1,
+      pageSize: 20,
+      personName: term || undefined
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.activities = res.items;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        }
+      });
+  }
 
   getInitials(name: string): string {
     return name
@@ -57,4 +96,32 @@ export class MonitoringComponent {
       .toUpperCase();
   }
 
+  getEventLabel(type: AccessEventType): string {
+    const labels: Record<number, string> = {
+      [AccessEventType.Entry]: 'Entrada',
+      [AccessEventType.Exit]: 'Saída',
+      [AccessEventType.Denied]: 'Negado'
+    };
+    return labels[type] ?? 'Desconhecido';
+  }
+
+  getEventClass(type: AccessEventType): string {
+    const classes: Record<number, string> = {
+      [AccessEventType.Entry]: 'bg-success',
+      [AccessEventType.Exit]: 'bg-danger',
+      [AccessEventType.Denied]: 'bg-warning text-dark'
+    };
+    return classes[type] ?? 'bg-secondary';
+  }
+
+  formatTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    const diffMs = Date.now() - date.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+
+    if (diffMin < 1) return 'Agora';
+    if (diffMin < 60) return `${diffMin} min atrás`;
+    const diffH = Math.floor(diffMin / 60);
+    return `${diffH}h atrás`;
+  }
 }

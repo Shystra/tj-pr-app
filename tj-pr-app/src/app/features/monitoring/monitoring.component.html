@@ -6,7 +6,7 @@
         <div class="card-body d-flex justify-content-between align-items-start">
           <div>
             <p class="small mb-1 opacity-75">Ativos Agora</p>
-            <h2 class="fw-bold mb-0">13</h2>
+            <h2 class="fw-bold mb-0">{{ totalAtivos }}</h2>
           </div>
           <div class="monitor-icon d-flex align-items-center justify-content-center">
             <i class="bi bi-activity fs-5"></i>
@@ -20,7 +20,7 @@
         <div class="card-body d-flex justify-content-between align-items-start">
           <div>
             <p class="small mb-1 opacity-75">Total Hoje</p>
-            <h2 class="fw-bold mb-0">102</h2>
+            <h2 class="fw-bold mb-0">{{ totalHoje }}</h2>
           </div>
           <div class="monitor-icon d-flex align-items-center justify-content-center">
             <i class="bi bi-graph-up fs-5"></i>
@@ -46,20 +46,21 @@
 
   <div class="row mb-4">
     <div class="col-lg-5 col-md-7">
-
       <div class="search-wrapper d-flex align-items-center px-3">
         <i class="bi bi-search me-2"></i>
-
-        <input type="text" class="search-input flex-grow-1" placeholder="Buscar por nome, cartão ou local..." />
+        <input type="text" class="search-input flex-grow-1" placeholder="Buscar por nome, cartão ou local..."
+          [value]="searchTerm" (input)="buscar($any($event.target).value)" />
       </div>
-
     </div>
   </div>
 
-  @for (activity of activities; track activity.cardNumber) {
+  @if (isLoading) {
+  <div class="d-flex justify-content-center py-5">
+    <span class="spinner-border text-primary"></span>
+  </div>
+  } @else if (activities.length > 0) {
   <div class="card shadow-sm border-0 rounded-4 monitor-activity mb-3">
     <div class="card-body">
-
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="fw-semibold mb-0">
           <i class="bi bi-activity me-2"></i>
@@ -69,49 +70,40 @@
       </div>
 
       <div class="list-group list-group-flush">
-
-
+        @for (activity of activities; track activity.id) {
         <div class="list-group-item border-0 px-0 py-3 bg-transparent">
           <div class="d-flex justify-content-between align-items-center">
-
             <div class="d-flex align-items-center gap-3">
-
               <div class="avatar-circle d-flex align-items-center justify-content-center">
-                {{ getInitials(activity.name) }}
+                {{ getInitials(activity.personName) }}
               </div>
-
               <div>
                 <div class="fw-semibold">
-                  {{ activity.name }}
-
-                  <span class="badge ms-2" [ngClass]="{
-                      'bg-success': activity.type === 'Entrada',
-                      'bg-danger': activity.type === 'Saída'
-                    }">
-                    {{ activity.type }}
+                  {{ activity.personName }}
+                  <span class="badge ms-2" [ngClass]="getEventClass(activity.eventType)">
+                    {{ getEventLabel(activity.eventType) }}
                   </span>
                 </div>
-
                 <div class="small text-muted">
-                  {{ activity.location }} • {{ activity.time }}
+                  {{ activity.doorName ?? 'Local não informado' }} • {{ formatTime(activity.eventTime) }}
                 </div>
               </div>
-
             </div>
-
             <div class="text-end small text-muted">
-              Cartão <br>
-              <span class="fw-semibold">
-                {{ activity.cardNumber }}
-              </span>
+              Dispositivo <br>
+              <span class="fw-semibold">{{ activity.deviceName }}</span>
             </div>
-
           </div>
         </div>
-
+        }
       </div>
-
     </div>
   </div>
+  } @else {
+  <div class="text-center py-5 text-muted">
+    <i class="bi bi-inbox fs-1"></i>
+    <p class="mt-2">Nenhuma atividade encontrada</p>
+  </div>
   }
+
 </div>
