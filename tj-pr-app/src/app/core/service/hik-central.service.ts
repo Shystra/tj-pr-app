@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { HikPersonRequest } from '../models/hik-person.model';
 import { HikOrganizationResponse } from '../models/hik-organization.model';
 import { PrivilegeGroupFilter, PrivilegeGroupResponse } from '../models/hik-privilege-group.model';
+import { FaceGroupFilter, FaceGroupResponse } from '../models/hik-face-group.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { PrivilegeGroupFilter, PrivilegeGroupResponse } from '../models/hik-priv
 export class HikCentralService {
   private url = `${environment.apiUrl}/hik-central`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   cadastrarPessoa(payload: HikPersonRequest): Observable<any> {
     return this.http.post(`${this.url}/persons`, payload);
@@ -37,5 +38,13 @@ export class HikCentralService {
       .set('type', filter.type);
 
     return this.http.get<PrivilegeGroupResponse>(`${this.url}/privilege-groups`, { params });
+  }
+
+  listarGruposFace(filter: FaceGroupFilter): Observable<FaceGroupResponse> {
+    const params = new HttpParams()
+      .set('pageNo', filter.pageNo)
+      .set('pageSize', filter.pageSize);
+
+    return this.http.get<FaceGroupResponse>(`${this.url}/face-groups`, { params });
   }
 }

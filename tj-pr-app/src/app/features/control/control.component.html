@@ -144,7 +144,6 @@
               </div>
             </div>
             }
-
             <!-- Departamento (select único) -->
             <div class="col-12 mt-2">
               <label class="form-label">Departamento</label>
@@ -163,6 +162,28 @@
                 <option value="">Selecione um departamento</option>
                 @for (group of privilegeGroups; track group.privilegeGroupId) {
                 <option [value]="group.privilegeGroupId">{{ group.privilegeGroupName }}</option>
+                }
+              </select>
+              }
+            </div>
+            <div class="col-12 mt-2">
+              <label class="form-label">Grupo de Face <span class="text-danger">*</span></label>
+              @if (isLoadingFaceGroups) {
+              <div class="d-flex align-items-center gap-2 text-muted">
+                <span class="spinner-border spinner-border-sm"></span>
+                <span class="small">Carregando grupos...</span>
+              </div>
+              } @else if (faceGroups.length === 0) {
+              <div class="alert alert-warning py-2 mb-0">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span class="small">Nenhum grupo de face encontrado.</span>
+              </div>
+              } @else {
+              <select class="form-select" multiple (change)="onFaceGroupChange($event)">
+                @for (group of faceGroups; track group.indexCode) {
+                <option [value]="group.indexCode" [selected]="form.value.faceGroupIndexCode?.includes(group.indexCode)">
+                  {{ group.name }}
+                </option>
                 }
               </select>
               }
@@ -215,5 +236,7 @@
         Limpar Formulário
       </button>
     </div>
+
+
   </form>
 </div>

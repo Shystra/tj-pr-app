@@ -10,6 +10,7 @@ import { OrgInfo } from '../../core/models/hik-organization.model';
 import { AccessType, HikPersonRequest } from '../../core/models/hik-person.model';
 import { PrivilegeGroupInfo } from '../../core/models/hik-privilege-group.model';
 import { AdvogadoCnaResponse } from '../../core/models/cna.model';
+import { FaceGroupInfo } from '../../core/models/hik-face-group.model';
 
 @Component({
   selector: 'app-control',
@@ -37,6 +38,8 @@ export class ControlComponent implements OnInit {
   oabSemUf = false;
   cnaData: AdvogadoCnaResponse | null = null;
   selectedGroupId = '';
+  faceGroups: FaceGroupInfo[] = [];
+  isLoadingFaceGroups = false;
 
   constructor(
     private fb: FormBuilder,
@@ -76,6 +79,7 @@ export class ControlComponent implements OnInit {
     this.ouvirTipoAcesso();
     this.loadOrganizations();
     this.loadPrivilegeGroups();
+    this.loadFaceGroups();
   }
 
   private ouvirTipoAcesso() {
@@ -103,6 +107,11 @@ export class ControlComponent implements OnInit {
     this.hikService.listarOrganizacoes(1, 50).subscribe({
       next: (res) => {
         this.organizations = res.list;
+
+        if (this.organizations.length > 0 && this.organizations[0].orgIndexCode) {
+          this.form.patchValue({ orgIndexCode: this.organizations[0].orgIndexCode });
+        }
+
         this.isLoadingOrgs = false;
       },
       error: () => {
@@ -116,10 +125,35 @@ export class ControlComponent implements OnInit {
     this.hikService.listarGruposPrivilegio({ pageNo: 1, pageSize: 50, type: 1 }).subscribe({
       next: (res) => {
         this.privilegeGroups = res.list ?? [];
+
+        if (this.privilegeGroups.length > 0 && this.privilegeGroups[0].privilegeGroupId) {
+          this.onGroupChange(this.privilegeGroups[0].privilegeGroupId);
+        }
+
         this.isLoadingGroups = false;
       },
       error: () => {
         this.isLoadingGroups = false;
+      }
+    });
+  }
+
+  loadFaceGroups() {
+    this.isLoadingFaceGroups = true;
+    this.hikService.listarGruposFace({ pageNo: 1, pageSize: 50 }).subscribe({
+      next: (res) => {
+        this.faceGroups = res.list ?? [];
+
+        const allIndexCodes = this.faceGroups.map(g => g.indexCode).filter(Boolean);
+
+        if (allIndexCodes.length > 0) {
+          this.form.patchValue({ faceGroupIndexCode: allIndexCodes });
+        }
+
+        this.isLoadingFaceGroups = false;
+      },
+      error: () => {
+        this.isLoadingFaceGroups = false;
       }
     });
   }
@@ -194,6 +228,12 @@ export class ControlComponent implements OnInit {
 
   onOabFocus() {
     this.oabSemUf = !this.form.value.uf;
+  }
+
+  onFaceGroupChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const selected = Array.from(select.selectedOptions).map(opt => opt.value);
+    this.form.patchValue({ faceGroupIndexCode: selected });
   }
 
   registrar() {
