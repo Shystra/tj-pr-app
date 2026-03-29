@@ -20,34 +20,33 @@
             </div>
             <div class="col-md-4">
               <label class="form-label">CPF <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="cpf"
-                mask="000.000.000-00" placeholder="000.000.000-00">
+              <input type="text" class="form-control" formControlName="cpf" mask="000.000.000-00"
+                placeholder="000.000.000-00">
             </div>
           </div>
 
           @if (form.value.tipoPessoa === 'ADVOGADO') {
-            <div class="row g-3 mt-2">
-              <div class="col-md-3">
-                <label class="form-label">UF</label>
-                <input type="text" class="form-control" formControlName="uf"
-                  maxlength="2" style="text-transform: uppercase">
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">OAB</label>
-                <input type="text" class="form-control" formControlName="oab">
-              </div>
-              <div class="col-md-3 d-flex align-items-end">
-                <button type="button" class="btn btn-primary w-100"
-                  (click)="consultarCna()" [disabled]="isLoadingCna">
-                  @if (isLoadingCna) {
-                    <span class="spinner-border spinner-border-sm me-1"></span>
-                    Consultando...
-                  } @else {
-                    Consultar CNA
-                  }
-                </button>
-              </div>
+          <div class="row g-3 mt-2">
+            <div class="col-md-3">
+              <label class="form-label">UF</label>
+              <input type="text" class="form-control" formControlName="uf" maxlength="2"
+                style="text-transform: uppercase">
             </div>
+            <div class="col-md-3">
+              <label class="form-label">OAB</label>
+              <input type="text" class="form-control" formControlName="oab">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <button type="button" class="btn btn-primary w-100" (click)="consultarCna()" [disabled]="isLoadingCna">
+                @if (isLoadingCna) {
+                <span class="spinner-border spinner-border-sm me-1"></span>
+                Consultando...
+                } @else {
+                Consultar CNA
+                }
+              </button>
+            </div>
+          </div>
           }
 
           <div class="row g-3 mt-2">
@@ -61,8 +60,8 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Telefone</label>
-              <input type="text" class="form-control" formControlName="phoneNo"
-                mask="(00) 00000-0000||(00) 0000-0000" placeholder="(00) 00000-0000">
+              <input type="text" class="form-control" formControlName="phoneNo" mask="(00) 00000-0000||(00) 0000-0000"
+                placeholder="(00) 00000-0000">
             </div>
             <div class="col-md-6">
               <label class="form-label">Email</label>
@@ -76,7 +75,7 @@
                   {{ isLoadingOrgs ? 'Carregando...' : 'Selecione' }}
                 </option>
                 @for (org of organizations; track org.orgIndexCode) {
-                  <option [value]="org.orgIndexCode">{{ org.orgName }}</option>
+                <option [value]="org.orgIndexCode">{{ org.orgName }}</option>
                 }
               </select>
             </div>
@@ -102,16 +101,16 @@
               <label class="form-label">Tipo de Acesso <span class="text-danger">*</span></label>
               <div class="d-flex gap-3 mt-1">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" formControlName="tipoAcesso"
-                    id="tipoPermanente" value="PERMANENTE">
+                  <input class="form-check-input" type="radio" formControlName="tipoAcesso" id="tipoPermanente"
+                    value="PERMANENTE">
                   <label class="form-check-label" for="tipoPermanente">
                     <i class="bi bi-infinity me-1"></i>
                     Acesso Permanente
                   </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" formControlName="tipoAcesso"
-                    id="tipoTemporario" value="TEMPORARIO">
+                  <input class="form-check-input" type="radio" formControlName="tipoAcesso" id="tipoTemporario"
+                    value="TEMPORARIO">
                   <label class="form-check-label" for="tipoTemporario">
                     <i class="bi bi-clock me-1"></i>
                     Acesso Temporário
@@ -121,24 +120,76 @@
             </div>
 
             @if (!isPermanente) {
-              <div class="col-md-6">
-                <label class="form-label">Data de Início <span class="text-danger">*</span></label>
-                <input type="datetime-local" class="form-control" formControlName="beginTime"
-                  [min]="hoje">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Data de Fim <span class="text-danger">*</span></label>
-                <input type="datetime-local" class="form-control" formControlName="endTime"
-                  [min]="form.value.beginTime || hoje">
-              </div>
+            <div class="col-md-6">
+              <label class="form-label">Data de Início <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control" formControlName="beginTime" [min]="hoje">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Data de Fim <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control" formControlName="endTime"
+                [min]="form.value.beginTime || hoje">
+            </div>
             } @else {
-              <div class="col-12">
-                <div class="alert alert-info d-flex align-items-center gap-2 mb-0 py-2">
-                  <i class="bi bi-info-circle"></i>
-                  <span class="small">O acesso será liberado a partir de agora sem data de expiração.</span>
-                </div>
+            <div class="col-12">
+              <div class="alert alert-info d-flex align-items-center gap-2 mb-0 py-2">
+                <i class="bi bi-info-circle"></i>
+                <span class="small">O acesso será liberado a partir de agora sem data de expiração.</span>
               </div>
+            </div>
             }
+
+            <!-- Grupos de Face -->
+            <div class="col-12 mt-2">
+              <label class="form-label">
+                Grupos de Acesso (Face)
+                <!-- <span class="text-danger">*</span> -->
+              </label>
+
+              @if (isLoadingGroups) {
+              <div class="d-flex align-items-center gap-2 text-muted">
+                <span class="spinner-border spinner-border-sm"></span>
+                <span class="small">Carregando grupos...</span>
+              </div>
+              } @else if (privilegeGroups.length === 0) {
+              <div class="alert alert-warning py-2 mb-0">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span class="small">Nenhum grupo de acesso encontrado.</span>
+              </div>
+              } @else {
+              <div class="row g-2 mt-1">
+                @for (group of privilegeGroups; track group.privilegeGroupId) {
+                <div class="col-md-4">
+                  <div class="form-check group-check-card p-3 rounded-3 border"
+                    [class.selected]="isGroupSelected(group.privilegeGroupId!)">
+                    <input class="form-check-input" type="checkbox" [id]="'group-' + group.privilegeGroupId"
+                      [checked]="isGroupSelected(group.privilegeGroupId!)"
+                      (change)="onGroupChange(group.privilegeGroupId!, $any($event.target).checked)">
+                    <label class="form-check-label w-100 cursor-pointer" [for]="'group-' + group.privilegeGroupId">
+                      <span class="fw-semibold d-block">{{ group.privilegeGroupName }}</span>
+                      @if (group.description) {
+                      <span class="small text-muted">{{ group.description }}</span>
+                      }
+                      @if (group.timeSchedule?.name) {
+                      <span class="badge bg-secondary mt-1">
+                        <i class="bi bi-clock me-1"></i>
+                        {{ group.timeSchedule!.name }}
+                      </span>
+                      }
+                    </label>
+                  </div>
+                </div>
+                }
+              </div>
+
+              @if (form.get('faceGroupIndexCode')?.invalid && form.get('faceGroupIndexCode')?.touched) {
+              <div class="text-danger small mt-1">
+                <i class="bi bi-exclamation-circle me-1"></i>
+                Selecione ao menos um grupo de acesso.
+              </div>
+              }
+              }
+            </div>
+
           </div>
         </div>
 
@@ -154,12 +205,12 @@
           </div>
           <div class="flex-grow-1 d-flex align-items-center justify-content-center rounded-4 mb-3 photo-preview">
             @if (fotoPreview) {
-              <img [src]="fotoPreview" class="img-fluid rounded-3">
+            <img [src]="fotoPreview" class="img-fluid rounded-3">
             } @else {
-              <div class="text-center opacity-75">
-                <i class="bi bi-camera fs-1"></i>
-                <p class="mt-2 mb-0">Nenhuma foto capturada</p>
-              </div>
+            <div class="text-center opacity-75">
+              <i class="bi bi-camera fs-1"></i>
+              <p class="mt-2 mb-0">Nenhuma foto capturada</p>
+            </div>
             }
           </div>
           <button type="button" class="btn btn-green w-100 text-white" (click)="fileInput.click()">
@@ -175,11 +226,11 @@
       <button type="submit" class="btn btn-gradient px-5 py-3 text-white fw-semibold shadow-sm"
         [disabled]="form.invalid || isLoading">
         @if (isLoading) {
-          <span class="spinner-border spinner-border-sm me-2"></span>
-          Salvando...
+        <span class="spinner-border spinner-border-sm me-2"></span>
+        Salvando...
         } @else {
-          <i class="bi bi-check-circle me-2"></i>
-          Registrar Acesso
+        <i class="bi bi-check-circle me-2"></i>
+        Registrar Acesso
         }
       </button>
       <button type="button" class="btn btn-outline-theme px-4 py-3"

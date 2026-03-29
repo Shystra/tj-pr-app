@@ -9,6 +9,7 @@ import { CnaService } from '../../core/service/cna.service';
 import { OnlyLettersInputDirective } from '../../shared/directives/only-letters.directive';
 import { OrgInfo } from '../../core/models/hik-organization.model';
 import { AccessType } from '../../core/models/hik-person.model';
+import { PrivilegeGroupInfo } from '../../core/models/hik-privilege-group.model';
 
 @Component({
   selector: 'app-control',
@@ -29,9 +30,11 @@ export class ControlComponent implements OnInit {
   form!: FormGroup;
   fotoPreview: string | null = null;
   organizations: OrgInfo[] = [];
+  privilegeGroups: PrivilegeGroupInfo[] = [];
   isLoading = false;
   isLoadingCna = false;
   isLoadingOrgs = false;
+  isLoadingGroups = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,6 +44,10 @@ export class ControlComponent implements OnInit {
 
   get isPermanente(): boolean {
     return this.form.get('tipoAcesso')?.value === 'PERMANENTE';
+  }
+
+  get hoje(): string {
+    return new Date().toISOString().slice(0, 16);
   }
 
   ngOnInit() {
@@ -66,6 +73,7 @@ export class ControlComponent implements OnInit {
 
     this.ouvirTipoAcesso();
     this.loadOrganizations();
+    this.loadPrivilegeGroups();
   }
 
   private ouvirTipoAcesso() {
@@ -99,6 +107,34 @@ export class ControlComponent implements OnInit {
         this.isLoadingOrgs = false;
       }
     });
+  }
+
+  loadPrivilegeGroups() {
+    this.isLoadingGroups = true;
+    this.hikService.listarGruposPrivilegio({ pageNo: 1, pageSize: 50, type: 1 }).subscribe({
+      next: (res) => {
+        this.privilegeGroups = res.list ?? [];
+        this.isLoadingGroups = false;
+      },
+      error: () => {
+        this.isLoadingGroups = false;
+      }
+    });
+  }
+
+  onGroupChange(groupId: string, checked: boolean) {
+    const current: string[] = this.form.get('faceGroupIndexCode')?.value ?? [];
+
+    const updated = checked
+      ? [...current, groupId]
+      : current.filter(id => id !== groupId);
+
+    this.form.patchValue({ faceGroupIndexCode: updated });
+  }
+
+  isGroupSelected(groupId: string): boolean {
+    const current: string[] = this.form.get('faceGroupIndexCode')?.value ?? [];
+    return current.includes(groupId);
   }
 
   consultarCna() {
@@ -173,9 +209,5 @@ export class ControlComponent implements OnInit {
         this.isLoading = false;
       }
     });
-  }
-
-  get hoje(): string {
-    return new Date().toISOString().slice(0, 16);
   }
 }

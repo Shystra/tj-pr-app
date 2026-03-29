@@ -104,3 +104,18 @@
     background: var(--monitor-activity-border);
     color: var(--text-color);
 }
+
+.group-check-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+
+  &:hover {
+    border-color: var(--bs-primary) !important;
+  }
+
+  &.selected {
+    border-color: var(--bs-primary) !important;
+    background: rgba(var(--bs-primary-rgb), 0.05);
+  }
+}
