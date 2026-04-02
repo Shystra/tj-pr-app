@@ -57,11 +57,11 @@ export class ControlComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      tipoPessoa: ['VISITANTE', Validators.required],
+      // tipoPessoa: ['VISITANTE', Validators.required],
       cpf: [''],
       oab: ['', Validators.required],
       uf: ['', Validators.required],
-      accessType: [AccessType.Visitor, Validators.required],
+      accessType: [AccessType.Employee, Validators.required],
       personGivenName: ['', Validators.required],
       personFamilyName: ['', Validators.required],
       gender: [1],
@@ -241,7 +241,6 @@ export class ControlComponent implements OnInit {
 
     this.isLoading = true;
     const { beginTime, endTime } = this.resolverDatas();
-    const isAdvogado = this.form.value.tipoPessoa === 'ADVOGADO';
 
     const payload: HikPersonRequest = {
       accessType: this.form.value.accessType,
@@ -257,7 +256,7 @@ export class ControlComponent implements OnInit {
       faceGroupIndexCode: this.form.value.faceGroupIndexCode,
       beginTime,
       endTime,
-      advogadoInfo: isAdvogado ? this.cnaData : null
+      advogadoInfo: this.cnaData
     };
 
     this.hikService.cadastrarPessoa(payload).subscribe({
@@ -265,7 +264,7 @@ export class ControlComponent implements OnInit {
         this.isLoading = false;
         this.cnaData = null;
         this.selectedGroupId = '';
-        this.form.reset({ tipoPessoa: 'VISITANTE', tipoAcesso: 'PERMANENTE' });
+        this.form.reset({ tipoAcesso: 'PERMANENTE' });
         this.fotoPreview = null;
       },
       error: () => {

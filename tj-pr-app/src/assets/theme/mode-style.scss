@@ -307,3 +307,7 @@ input:-webkit-autofill {
   background-color: var(--monitor-activity-bg) !important;
   color: var(--text-color) !important;
 }
+
+[data-theme="dark"] .mdc-tab__text-label {
+  color: white !important;
+}
