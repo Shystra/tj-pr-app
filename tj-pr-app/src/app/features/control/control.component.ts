@@ -190,7 +190,26 @@ export class ControlComponent implements OnInit {
           phoneNo: telefoneCompleto,
           cpf: res.cpf ?? ''
         });
-        this.isLoadingCna = false;
+
+        if (res.numeroSeguranca) {
+          this.cnaService.buscarImagem(res.numeroSeguranca).subscribe({
+            next: (blob) => {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const dataUrl = reader.result as string;
+                this.fotoPreview = dataUrl;
+                this.form.patchValue({ faceData: dataUrl.split(',')[1] });
+              };
+              reader.readAsDataURL(blob);
+              this.isLoadingCna = false;
+            },
+            error: () => {
+              this.isLoadingCna = false;
+            }
+          });
+        } else {
+          this.isLoadingCna = false;
+        }
       },
       error: () => {
         this.isLoadingCna = false;
