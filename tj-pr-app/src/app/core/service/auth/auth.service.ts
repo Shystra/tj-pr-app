@@ -12,7 +12,8 @@ const tenantHeader = new HttpHeaders({ tenant: 'root' });
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private identityBaseUrl = `${environment.apiUrl}/api/v1/identity`;
+  // private identityBaseUrl = `${environment.apiUrl}/api/v1/identity`;
+  private identityBaseUrl = `${environment.apiUrlTeste}/identity`;
   private authStorageKey = 'auth_token';
   private authToken: AuthToken | null = null;
 
