@@ -1,0 +1,64 @@
+<section class="login-page">
+  <div class="login-page__overlay"></div>
+  <div class="container-fluid position-relative h-100">
+    <div class="row align-items-center min-vh-100 g-4 px-lg-4">
+      <div class="col-12 col-xl-5 col-xxl-4">
+        <div class="login-card card border-0">
+          <div class="login-card__content">
+            <div class="text-center mb-4 pt-4">
+              <img src="assets/images/logo_tj.jpeg" alt="TJ" class="login-logo">
+              <h5 class="login-card__title">{{ 'LOGIN.WELCOME_BACK' | translate }}</h5>
+              <p class="login-card__subtitle text-muted mb-0">
+                {{ 'LOGIN.SYSTEM' | translate }}
+              </p>
+            </div>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-2">
+              <label>{{ 'LOGIN.EMAIL_LABEL' | translate }}</label>
+              <mat-form-field appearance="outline" class="w-100">
+                <input matInput formControlName="email" type="email" autocomplete="email"
+                  [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate">
+                <mat-icon matSuffix>mail_outline</mat-icon>
+                @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+                <mat-error>{{ 'LOGIN.EMAIL_REQUIRED' | translate }}</mat-error>
+                } @else if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+                <mat-error>{{ 'LOGIN.EMAIL_INVALID' | translate }}</mat-error>
+                }
+              </mat-form-field>
+              <label>{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
+              <mat-form-field appearance="outline" class="w-100">
+                <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
+                  autocomplete="current-password" [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate">
+                <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
+                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+                <mat-error>{{ 'LOGIN.PASSWORD_REQUIRED' | translate }}</mat-error>
+                } @else if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
+                <mat-error>{{ 'LOGIN.PASSWORD_MIN' | translate }}</mat-error>
+                }
+              </mat-form-field>
+              <div class="login-card__options">
+                <mat-checkbox formControlName="rememberMe" color="primary">
+                  {{ 'LOGIN.REMEMBER_ME' | translate }}
+                </mat-checkbox>
+              </div>
+              <button mat-flat-button color="primary" class="w-100 login-card__submit"
+                [disabled]="loading || loginForm.invalid">
+                @if (loading) {
+                <mat-spinner diameter="22"></mat-spinner>
+                } @else {
+                {{ 'LOGIN.SUBMIT_BUTTON' | translate }}
+                }
+              </button>
+            </form>
+            <div class="login-card__footer text-center">
+              <p class="mb-2 pt-4 text-muted small">
+                {{ 'LOGIN.COPYRIGHT' | translate:{ year: currentYear } }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

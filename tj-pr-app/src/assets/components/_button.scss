@@ -1,0 +1,217 @@
+// styles/components/_button.scss
+// Todos os valores usam CSS vars definidos pelo AppThemeService / _mode-theme.scss
+
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-flat-button,
+.mat-mdc-outlined-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--button-gap);
+
+  height: var(--button-height);
+  min-height: var(--button-height);
+  padding: 0 var(--button-padding-x);
+  border-radius: var(--button-radius);
+  font-family: var(--font-family);
+  font-weight: var(--button-font-weight);
+  font-size: var(--button-font-size);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  transition: var(--button-transition);
+  box-shadow: none !important;
+  vertical-align: middle;
+
+  .mdc-button__label {
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--button-gap);
+    line-height: 1;
+  }
+
+  mat-icon {
+    font-size: var(--button-icon-size);
+    width: var(--button-icon-size);
+    height: var(--button-icon-size);
+    line-height: var(--button-icon-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring) !important;
+  }
+}
+
+.mat-mdc-button .mat-mdc-button-touch-target,
+.mat-mdc-raised-button .mat-mdc-button-touch-target,
+.mat-mdc-flat-button .mat-mdc-button-touch-target,
+.mat-mdc-outlined-button .mat-mdc-button-touch-target,
+.mat-mdc-button .mdc-button__ripple,
+.mat-mdc-raised-button .mdc-button__ripple,
+.mat-mdc-flat-button .mdc-button__ripple,
+.mat-mdc-outlined-button .mdc-button__ripple {
+  height: var(--button-height) !important;
+}
+
+.mat-mdc-button-base {
+  height: var(--button-height) !important;
+}
+
+.mat-mdc-icon-button {
+  width: var(--icon-button-size) !important;
+  height: var(--icon-button-size) !important;
+  padding: 0 !important;
+  border-radius: var(--icon-button-radius) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: var(--button-transition);
+  vertical-align: middle;
+
+  .mat-icon {
+    font-size: var(--icon-button-icon-size);
+    width: var(--icon-button-icon-size);
+    height: var(--icon-button-icon-size);
+    line-height: var(--icon-button-icon-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--button-secondary-hover-bg);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring) !important;
+  }
+}
+
+// ── PRIMARY ──────────────────────────────────────────────────────────────────
+
+.mat-mdc-flat-button.mat-primary,
+.mat-mdc-raised-button.mat-primary {
+  background: var(--tj-pr-0) !important;
+  color: var(--on-primary) !important;
+
+  .mat-icon,
+  mat-icon,
+  .material-icons,
+  .material-symbols-outlined {
+    color: var(--on-primary) !important;
+  }
+
+  &:hover:not(:disabled) { background: var(--button-primary-hover-bg) !important; }
+  &:active:not(:disabled) { background: var(--button-primary-active-bg) !important; }
+  &:disabled {
+    background: var(--button-disabled-bg) !important;
+    color: var(--button-disabled-text) !important;
+  }
+}
+
+// ── SECONDARY / ACCENT ────────────────────────────────────────────────────────
+
+.mat-mdc-flat-button.mat-accent {
+  background: var(--button-secondary-bg) !important;
+  color: var(--button-secondary-text) !important;
+  border: var(--button-border-width) solid var(--button-secondary-border);
+
+  &:hover:not(:disabled) { background: var(--button-secondary-hover-bg) !important; }
+  &:active:not(:disabled) { background: var(--button-secondary-active-bg) !important; }
+  &:disabled {
+    background: var(--button-disabled-bg) !important;
+    color: var(--button-disabled-text) !important;
+    border-color: var(--button-secondary-border) !important;
+  }
+}
+
+// ── OUTLINE ──────────────────────────────────────────────────────────────────
+
+.mat-mdc-outlined-button {
+  border: var(--button-border-width) solid var(--button-secondary-border) !important;
+  color: var(--button-secondary-text) !important;
+  background: var(--button-secondary-bg) !important;
+
+  &:hover:not(:disabled) {
+    border-color: var(--tj-pr-0) !important;
+    color: var(--tj-pr-0) !important;
+    background: var(--button-secondary-hover-bg) !important;
+  }
+
+  &:active:not(:disabled) {
+    background: var(--button-secondary-active-bg) !important;
+  }
+
+  &:disabled {
+    border-color: var(--button-secondary-border) !important;
+    color: var(--button-disabled-text) !important;
+    opacity: 1;
+  }
+}
+
+// ── TEXT ─────────────────────────────────────────────────────────────────────
+
+.mat-mdc-button {
+  color: var(--text-secondary) !important;
+
+  &:hover:not(:disabled) {
+    color: var(--tj-pr-0) !important;
+    background: var(--button-secondary-hover-bg) !important;
+  }
+
+  &:active:not(:disabled) {
+    background: var(--button-secondary-active-bg) !important;
+  }
+}
+
+// ── WARN ─────────────────────────────────────────────────────────────────────
+
+.mat-mdc-flat-button.mat-warn {
+  background: var(--button-danger-bg) !important;
+  color: var(--on-primary) !important;
+
+  &:hover:not(:disabled) {
+    background: var(--button-danger-hover-bg) !important;
+  }
+
+  &:disabled {
+    background: var(--button-disabled-bg) !important;
+    color: var(--button-disabled-text) !important;
+  }
+}
+
+.mat-mdc-icon-button.mat-warn {
+  color: var(--error) !important;
+
+  &:hover:not(:disabled) {
+    background: var(--button-danger-soft-hover-bg) !important;
+  }
+}
+
+.mat-mdc-icon-button.mat-primary {
+  color: var(--tj-pr-0) !important;
+}
+
+.mat-mdc-icon-button.close-btn,
+.app-standard-dialog-close {
+  color: var(--text-secondary) !important;
+}
+
+// ── Spinner dentro de botão ───────────────────────────────────────────────────
+
+.mat-mdc-button mat-spinner,
+.mat-mdc-flat-button mat-spinner,
+.mat-mdc-outlined-button mat-spinner,
+.mat-mdc-raised-button mat-spinner {
+  width:  18px !important;
+  height: 18px !important;
+}

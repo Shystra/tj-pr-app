@@ -1,0 +1,214 @@
+// styles/components/_input.scss
+
+.mat-mdc-form-field {
+  width: 100%;
+  display: block;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  margin-bottom: 0;
+}
+
+.mat-mdc-text-field-wrapper {
+  border-radius: var(--field-radius);
+  padding: 0 var(--field-padding-x);
+  min-height: var(--field-height);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.mat-mdc-form-field-infix {
+  min-height: calc(var(--field-height) - 2px) !important;
+  height: calc(var(--field-height) - 2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.mat-mdc-input-element {
+  height: calc(var(--field-height) - 2px) !important;
+  min-height: calc(var(--field-height) - 2px);
+  line-height: calc(var(--field-height) - 2px);
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  font-family: var(--font-family);
+  color: var(--text);
+  vertical-align: middle;
+  align-self: center;
+  display: block;
+}
+
+.mat-mdc-floating-label {
+  color: var(--text-secondary);
+  font-size: var(--field-label-size);
+  top: 22px !important;
+}
+
+.mat-mdc-form-field-flex {
+  height: var(--field-height);
+  min-height: var(--field-height);
+  align-items: center;
+}
+
+.mat-mdc-input-element::placeholder {
+  line-height: calc(var(--field-height) - 2px);
+}
+
+.mat-mdc-form-field-hint {
+  color: var(--text-secondary);
+  font-size: var(--field-hint-size);
+}
+
+.mat-mdc-form-field-error {
+  color: var(--error);
+  font-size: var(--field-hint-size);
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  margin-top: 2px;
+  min-height: 0;
+}
+
+.mat-mdc-form-field-bottom-align::before {
+  content: none !important;
+  display: none !important;
+}
+
+// ── Filled ────────────────────────────────────────────────────────────────────
+
+.mdc-text-field--filled {
+  --mdc-filled-text-field-container-color: var(--field-filled-bg);
+  --mdc-filled-text-field-active-indicator-height: 1px;
+  --mdc-filled-text-field-hover-active-indicator-color: var(--border-strong);
+  border-radius: var(--field-radius);
+}
+
+.mdc-text-field--filled:hover {
+  --mdc-filled-text-field-container-color: var(--field-filled-hover-bg);
+  --mdc-filled-text-field-active-indicator-height: 2px;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-text-field--filled {
+  --mdc-filled-text-field-container-color: var(--field-filled-focus-bg);
+  --mdc-filled-text-field-active-indicator-color: var(--primary);
+  --mdc-filled-text-field-active-indicator-height: 2px;
+}
+
+.mdc-text-field--filled.mdc-text-field--invalid {
+  --mdc-filled-text-field-active-indicator-height: 2px;
+  --mdc-filled-text-field-active-indicator-color: var(--error);
+}
+
+// ── Outline ───────────────────────────────────────────────────────────────────
+
+.mat-mdc-form-field.mat-form-field-appearance-outline {
+  .mat-mdc-text-field-wrapper {
+    border-radius: var(--field-radius);
+  }
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--border);
+  }
+
+  .mdc-notched-outline__leading {
+    border-radius: var(--field-radius) 0 0 var(--field-radius);
+  }
+
+  .mdc-notched-outline__trailing {
+    border-radius: 0 var(--field-radius) var(--field-radius) 0;
+  }
+
+  .mdc-notched-outline__notch {
+    border-left: none;
+    border-right: none;
+  }
+
+  &.mat-focused {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--primary);
+    }
+  }
+
+  &:not(.mat-focused):hover {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--border-strong);
+    }
+  }
+}
+
+// ── Ícones ────────────────────────────────────────────────────────────────────
+
+.mat-mdc-form-field-icon-suffix,
+.mat-mdc-form-field-icon-prefix {
+  color: var(--text-secondary);
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ── Disabled ──────────────────────────────────────────────────────────────────
+
+.mat-mdc-form-field.mat-form-field-disabled {
+  opacity: 0.6;
+}
+
+// ── Select ───────────────────────────────────────────────────────────────────
+
+.mat-mdc-select-value {
+  color:       var(--text);
+  font-family: var(--font-family);
+  line-height: calc(var(--field-height) - 2px);
+  display: inline-flex;
+  align-items: center;
+  min-height: calc(var(--field-height) - 2px);
+}
+
+.mat-mdc-option {
+  font-family: var(--font-family);
+  color:       var(--text);
+  background:  var(--card);
+}
+
+.mat-mdc-option:hover:not(.mdc-list-item--disabled),
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background: var(--card);
+}
+
+.mat-mdc-select-trigger {
+  min-height: calc(var(--field-height) - 2px);
+  height: calc(var(--field-height) - 2px);
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+.mat-mdc-select-value-text,
+.mat-mdc-select-min-line,
+.mat-mdc-select-placeholder {
+  line-height: calc(var(--field-height) - 2px);
+  display: inline-flex;
+  align-items: center;
+}
+
+.mat-mdc-select-arrow-wrapper {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+}
+
+.cdk-overlay-pane .mat-mdc-select-panel {
+  background: var(--card) !important;
+}

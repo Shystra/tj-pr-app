@@ -1,12 +1,19 @@
 import { Routes } from '@angular/router';
-import { STRING_EMPTY } from './shared/constants/string-consts';
 
 export const APP_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
+      import('./features/auth/login/login.component')
+        .then(m => m.LoginComponent)
+  },
+
+  {
+    path: 'home',
+    loadComponent: () =>
       import('./layout/components/layout/layout.component')
         .then(m => m.LayoutComponent),
+
     children: [
       {
         path: '',
@@ -28,5 +35,10 @@ export const APP_ROUTES: Routes = [
             .then(m => m.MonitoringComponent)
       }
     ]
+  },
+
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];

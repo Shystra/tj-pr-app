@@ -2,9 +2,13 @@
 /* --------------------- */
 /* 1) TODOS OS @use      */
 /* --------------------- */
+
 @use "assets/theme/variables" as *;
 @use "assets/theme/theme" as *;
 @use "bootstrap/scss/bootstrap" as *;
+
+@use "./assets/components/input";
+@use "./assets/components/button";
 
 /* --------------------- */
 /* 2) IMPORTS CSS */

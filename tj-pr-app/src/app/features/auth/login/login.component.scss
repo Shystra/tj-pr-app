@@ -1,0 +1,241 @@
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  background-image:
+    linear-gradient(90deg, color-mix(in srgb, var(--tj-pr-0) 88%, transparent) 0%, color-mix(in srgb, var(--tj-pr-0) 74%, transparent) 42%, color-mix(in srgb, var(--tj-pr-0) 40%, transparent) 100%),
+    url('/assets/images/fundo_login.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.login-page__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--tj-pr-0) 16%, transparent), transparent 28%),
+    radial-gradient(circle at 18% 52%, color-mix(in srgb, var(--tj-pr-0) 35%, transparent), transparent 34%);
+  pointer-events: none;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  max-width: 450px;
+  margin: 0 auto;
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: var(--shadow-lg);
+}
+
+.login-card__toolbar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+
+.login-card__toolbar .mat-mdc-icon-button {
+  background: color-mix(in srgb, var(--surface-muted) 88%, transparent);
+}
+
+.login-card__language-button {
+  background: color-mix(in srgb, var(--tj-pr-0) 10%, white) !important;
+}
+
+.login-card__language-button .mat-icon {
+  color: var(--tj-pr-0) !important;
+}
+
+.login-card__language-button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--tj-pr-0) 16%, white) !important;
+}
+
+.login-card__content {
+  padding: 32px 32px 24px;
+}
+
+.login-logo {
+  width: min(100px, 72%);
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.login-card__title {
+  margin: 0 0 8px;
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--tj-pr-0);
+}
+
+.login-card__options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 6px 0 10px;
+}
+
+.login-card__support-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--tj-pr-0);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.login-card__support-link:hover,
+.login-card__support-link:focus-visible {
+  color: var(--tj-pr-0-hover);
+}
+
+.login-card__submit {
+  margin-top: 6px;
+  height: 52px;
+  border-radius: 14px;
+}
+
+:host ::ng-deep .login-card__options .mat-mdc-checkbox .mdc-form-field {
+  align-items: center;
+}
+
+:host ::ng-deep .login-card__options .mat-mdc-checkbox .mdc-label {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  padding-top: 0;
+}
+
+.login-hero {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin-left: auto;
+  color: white;
+  padding: 48px 24px 48px 0px;
+}
+
+.login-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  background: color-mix(in srgb, white 12%, transparent);
+  border: 1px solid color-mix(in srgb, white 18%, transparent);
+  backdrop-filter: blur(12px);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.login-hero__title {
+  margin: 0 0 20px;
+  font-size: clamp(3rem, 4.8vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  color: white;
+}
+
+.login-hero__description {
+  max-width: 560px;
+  margin: 0 0 30px;
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, white 88%, transparent);
+}
+
+.login-hero__features {
+  display: grid;
+  gap: 18px;
+}
+
+.login-feature {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.login-feature__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, white 18%, transparent);
+  border: 1px solid color-mix(in srgb, white 16%, transparent);
+}
+
+.login-feature__icon .mat-icon {
+  color: white !important;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.login-feature strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: white;
+}
+
+.login-feature p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, white 84%, transparent);
+}
+
+@media (max-width: 1199.98px) {
+  .login-page {
+    background-image:
+      linear-gradient(180deg, color-mix(in srgb, var(--tj-pr-0) 82%, transparent), color-mix(in srgb, var(--tj-pr-0) 62%, transparent)),
+      url('/assets/images/fundo_login.png');
+  }
+
+  .login-card {
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .login-page {
+    padding: 64px 0 24px;
+  }
+
+  .login-card__content {
+    padding: 24px 20px 20px;
+  }
+
+  .login-card__toolbar {
+    top: 10px;
+    right: 10px;
+  }
+
+  .login-card__title {
+    font-size: 1.9rem;
+  }
+
+  .login-logo {
+    width: min(220px, 78%);
+  }
+
+  .login-card__options {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
