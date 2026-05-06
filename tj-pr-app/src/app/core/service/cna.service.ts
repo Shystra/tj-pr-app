@@ -15,4 +15,8 @@ export class CnaService {
   consultarAdvogado(uf: string, oab: string): Observable<AdvogadoCnaResponse> {
     return this.http.get<AdvogadoCnaResponse>(`${this.url}/${uf}/${oab}`);
   }
+
+  buscarImagem(numeroSeguranca: string): Observable<Blob> {
+    return this.http.get(`${this.url}/imagem/${numeroSeguranca}`, { responseType: 'blob' });
+  }
 }
