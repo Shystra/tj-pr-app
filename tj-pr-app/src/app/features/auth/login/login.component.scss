@@ -2,8 +2,13 @@
   position: relative;
   min-height: 100vh;
   background-image:
-    linear-gradient(90deg, color-mix(in srgb, var(--tj-pr-0) 88%, transparent) 0%, color-mix(in srgb, var(--tj-pr-0) 74%, transparent) 42%, color-mix(in srgb, var(--tj-pr-0) 40%, transparent) 100%),
-    url('/assets/images/fundo_login.png');
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--tj-pr-0) 88%, transparent) 0%,
+      color-mix(in srgb, var(--tj-pr-0) 74%, transparent) 42%,
+      color-mix(in srgb, var(--tj-pr-0) 40%, transparent) 100%
+    ),
+    url("/assets/images/fundo_login.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -14,8 +19,16 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--tj-pr-0) 16%, transparent), transparent 28%),
-    radial-gradient(circle at 18% 52%, color-mix(in srgb, var(--tj-pr-0) 35%, transparent), transparent 34%);
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--tj-pr-0) 16%, transparent),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 18% 52%,
+      color-mix(in srgb, var(--tj-pr-0) 35%, transparent),
+      transparent 34%
+    );
   pointer-events: none;
 }
 
@@ -99,8 +112,8 @@
 
 .login-card__submit {
   margin-top: 6px;
-  height: 52px;
-  border-radius: 14px;
+  height: var(--button-height);
+  border-radius: var(--button-radius);
 }
 
 :host ::ng-deep .login-card__options .mat-mdc-checkbox .mdc-form-field {
@@ -178,7 +191,7 @@
 }
 
 .login-feature__icon .mat-icon {
-  color: white !important;
+  color: rgb(128, 127, 127) !important;
   font-size: 18px;
   width: 18px;
   height: 18px;
@@ -202,8 +215,12 @@
 @media (max-width: 1199.98px) {
   .login-page {
     background-image:
-      linear-gradient(180deg, color-mix(in srgb, var(--tj-pr-0) 82%, transparent), color-mix(in srgb, var(--tj-pr-0) 62%, transparent)),
-      url('/assets/images/fundo_login.png');
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--tj-pr-0) 82%, transparent),
+        color-mix(in srgb, var(--tj-pr-0) 62%, transparent)
+      ),
+      url("/assets/images/fundo_login.png");
   }
 
   .login-card {
@@ -238,4 +255,11 @@
     align-items: center;
     justify-content: space-between;
   }
+}
+
+mat-icon,
+i,
+svg {
+  color: var(--tj-pr-100) !important;
+  transition: color 0.3s ease;
 }

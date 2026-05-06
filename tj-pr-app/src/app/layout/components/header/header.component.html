@@ -43,9 +43,14 @@
         </div>
       </div>
 
-      <mat-icon class="me-2 cursor-pointer" (click)="toggleTheme()">
-        {{ isDarkTheme ? 'dark_mode' : 'wb_sunny' }}
-      </mat-icon>
+      <button mat-icon-button type="button" class="header-action" matTooltip="Alternar tema" (click)="toggleTheme()">
+        <mat-icon>{{ isDarkTheme ? 'dark_mode' : 'wb_sunny' }}</mat-icon>
+      </button>
+
+      <button mat-icon-button type="button" class="header-action header-action--logout" matTooltip="Sair"
+        (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
     </div>
   </div>
 </nav>

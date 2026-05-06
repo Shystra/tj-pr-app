@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AuthService } from '../../../core/service/auth/auth.service';
@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
     private translationService: TranslationService,
@@ -89,7 +90,7 @@ export class LoginComponent implements OnInit {
           { duration: 3000, panelClass: 'snack-success' },
         );
 
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl(this.getReturnUrl());
       },
       error: (httpError: HttpErrorResponse) => {
         this.loading = false;
@@ -103,5 +104,11 @@ export class LoginComponent implements OnInit {
         );
       },
     });
+  }
+
+  private getReturnUrl(): string {
+    const returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl');
+
+    return returnUrl?.startsWith('/') ? returnUrl : '/home';
   }
 }

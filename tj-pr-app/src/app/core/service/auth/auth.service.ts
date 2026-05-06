@@ -24,7 +24,18 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.authToken !== null && !!TokenMethodsUtils.getToken();
+    const hasSession = this.authToken !== null && !!TokenMethodsUtils.getToken();
+
+    if (!hasSession) {
+      return false;
+    }
+
+    if (TokenMethodsUtils.isTokenExpired()) {
+      this.clearSession();
+      return false;
+    }
+
+    return true;
   }
 
   currentUser(): AuthToken | null {
@@ -78,11 +89,15 @@ export class AuthService {
   }
 
   logout(): void {
+    this.clearSession();
+    this.router.navigate(['/auth/login']);
+  }
+
+  private clearSession(): void {
     localStorage.removeItem(this.authStorageKey);
     sessionStorage.removeItem(this.authStorageKey);
     TokenMethodsUtils.signOut();
     this.authToken = null;
-    this.router.navigate(['/auth/login']);
   }
 
   private loadStoredToken(): AuthToken | null {

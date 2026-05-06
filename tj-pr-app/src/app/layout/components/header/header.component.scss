@@ -38,6 +38,28 @@ mat-icons {
   transition: color 0.3s ease;
 }
 
+.header-action {
+  color: var(--icon-color) !important;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  mat-icon {
+    color: var(--icon-color) !important;
+  }
+}
+
+.header-action:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.header-action--logout:hover {
+  color: #ffb4ab !important;
+
+  mat-icon {
+    color: #ffb4ab !important;
+  }
+}
+
 /* ===== HEADER CARDS ===== */
 
 .header-card {

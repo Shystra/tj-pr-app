@@ -31,6 +31,23 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.16);
 
+  // Semantic colors
+  --primary: var(--tj-pr-0);
+  --primary-hover: color-mix(in srgb, var(--tj-pr-0) 88%, black);
+  --primary-active: color-mix(in srgb, var(--tj-pr-0) 78%, black);
+  --on-primary: var(--tj-pr-90);
+  --body-bg: var(--tj-pr-90);
+  --text-color: var(--tj-pr-100);
+  --text: var(--tj-pr-100);
+  --text-secondary: color-mix(in srgb, var(--tj-pr-100) 68%, white);
+  --icon-color: var(--tj-pr-0);
+  --card: var(--tj-pr-90);
+  --surface-muted: var(--tj-pr-80);
+  --border: color-mix(in srgb, var(--tj-pr-100) 18%, white);
+  --border-strong: color-mix(in srgb, var(--tj-pr-100) 34%, white);
+  --error: #b42318;
+  --focus-ring: rgba(var(--tj-pr-0-rgb), 0.22);
+
   // Buttons
   --button-height: 40px;
   --button-padding-x: 16px;
@@ -40,6 +57,18 @@
   --button-icon-size: 20px;
   --button-border-width: 1px;
   --button-radius: var(--radius);
+  --button-primary-hover-bg: var(--primary-hover);
+  --button-primary-active-bg: var(--primary-active);
+  --button-secondary-bg: var(--tj-pr-90);
+  --button-secondary-text: var(--tj-pr-0);
+  --button-secondary-border: color-mix(in srgb, var(--tj-pr-0) 24%, white);
+  --button-secondary-hover-bg: color-mix(in srgb, var(--tj-pr-0) 8%, white);
+  --button-secondary-active-bg: color-mix(in srgb, var(--tj-pr-0) 14%, white);
+  --button-disabled-bg: var(--tj-pr-60);
+  --button-disabled-text: color-mix(in srgb, var(--tj-pr-100) 46%, white);
+  --button-danger-bg: #b42318;
+  --button-danger-hover-bg: #8f1d14;
+  --button-danger-soft-hover-bg: rgba(180, 35, 24, 0.1);
   --button-transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 
   // Icon buttons
@@ -48,12 +77,17 @@
   --icon-button-icon-size: 20px;
 
   // Inputs
-  --field-height: 50px;
+  --field-height: 40px;
   --field-min-height: 36px;
-  --field-padding-x: 10px;
-  --field-label-size: 13px;
-  --field-hint-size: 11px;
+  --field-padding-x: 12px;
+  --field-label-size: 14px;
+  --field-hint-size: 12px;
   --field-radius: var(--radius-sm);
+  --field-icon-size: 20px;
+  --field-icon-slot-size: 32px;
+  --field-filled-bg: var(--tj-pr-80);
+  --field-filled-hover-bg: color-mix(in srgb, var(--tj-pr-0) 5%, var(--tj-pr-80));
+  --field-filled-focus-bg: var(--tj-pr-90);
 
   // Tables
   --table-header-height: 48px;
@@ -78,6 +112,20 @@
   --text-color: var(--tj-pr-100);
   --text-color-button: var(--tj-pr-0);
   --text-color-button-secondary: var(--tj-pr-100);
+  --text: var(--tj-pr-100);
+  --text-secondary: color-mix(in srgb, var(--tj-pr-100) 68%, white);
+  --card: var(--tj-pr-90);
+  --surface-muted: var(--tj-pr-80);
+  --border: color-mix(in srgb, var(--tj-pr-100) 18%, white);
+  --border-strong: color-mix(in srgb, var(--tj-pr-100) 34%, white);
+  --field-filled-bg: var(--tj-pr-80);
+  --field-filled-hover-bg: color-mix(in srgb, var(--tj-pr-0) 5%, var(--tj-pr-80));
+  --field-filled-focus-bg: var(--tj-pr-90);
+  --button-secondary-bg: var(--tj-pr-90);
+  --button-secondary-text: var(--tj-pr-0);
+  --button-secondary-border: color-mix(in srgb, var(--tj-pr-0) 24%, white);
+  --button-secondary-hover-bg: color-mix(in srgb, var(--tj-pr-0) 8%, white);
+  --button-secondary-active-bg: color-mix(in srgb, var(--tj-pr-0) 14%, white);
 
   /* azul escuro */
   --icon-color: var(--tj-pr-90);
@@ -127,7 +175,21 @@
 [data-theme="dark"] {
   --body-bg: var(--tj-pr-100);
   /* fundo azul escuro */
-  --text-color: var(--tj-pr-90);
+  --text-color: var(--tj-pr-100);
+  --text: var(--tj-pr-90);
+  --text-secondary: color-mix(in srgb, var(--tj-pr-90) 72%, var(--tj-pr-100));
+  --card: var(--tj-pr-20);
+  --surface-muted: var(--tj-pr-30);
+  --border: color-mix(in srgb, var(--tj-pr-90) 18%, transparent);
+  --border-strong: color-mix(in srgb, var(--tj-pr-90) 34%, transparent);
+  --field-filled-bg: color-mix(in srgb, var(--tj-pr-90) 8%, var(--tj-pr-20));
+  --field-filled-hover-bg: color-mix(in srgb, var(--tj-pr-90) 12%, var(--tj-pr-20));
+  --field-filled-focus-bg: color-mix(in srgb, var(--tj-pr-90) 14%, var(--tj-pr-20));
+  --button-secondary-bg: color-mix(in srgb, var(--tj-pr-90) 8%, transparent);
+  --button-secondary-text: var(--tj-pr-90);
+  --button-secondary-border: color-mix(in srgb, var(--tj-pr-90) 24%, transparent);
+  --button-secondary-hover-bg: color-mix(in srgb, var(--tj-pr-90) 12%, transparent);
+  --button-secondary-active-bg: color-mix(in srgb, var(--tj-pr-90) 16%, transparent);
   /* texto branco */
 
   /* ícones precisam ser ESCUROS no dark mode */

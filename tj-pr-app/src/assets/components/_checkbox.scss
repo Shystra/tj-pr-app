@@ -1,0 +1,26 @@
+.mat-mdc-checkbox {
+  --mat-checkbox-label-text-font: var(--font-family);
+  --mat-checkbox-label-text-line-height: var(--line-height-base);
+  --mat-checkbox-label-text-size: var(--font-size-base);
+  --mat-checkbox-label-text-tracking: 0;
+  --mat-checkbox-label-text-weight: var(--font-weight-base);
+  --mdc-checkbox-state-layer-size: 36px;
+  font-family: var(--font-family);
+}
+
+.mat-mdc-checkbox.mat-primary {
+  --mdc-checkbox-selected-checkmark-color: var(--on-primary);
+  --mdc-checkbox-selected-focus-icon-color: var(--tj-pr-0);
+  --mdc-checkbox-selected-hover-icon-color: var(--tj-pr-0);
+  --mdc-checkbox-selected-icon-color: var(--tj-pr-0);
+  --mdc-checkbox-selected-pressed-icon-color: var(--tj-pr-0);
+  --mdc-checkbox-selected-focus-state-layer-color: var(--tj-pr-0);
+  --mdc-checkbox-selected-hover-state-layer-color: var(--tj-pr-0);
+  --mdc-checkbox-selected-pressed-state-layer-color: var(--tj-pr-0);
+}
+
+.mat-mdc-checkbox .mdc-form-field {
+  color: var(--text);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+}

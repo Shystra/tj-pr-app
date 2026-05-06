@@ -6,10 +6,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { AccessControlService } from '../../../core/service/access-control.service';
 import { AccessEventType, AccessResultType } from '../../../core/models/access-event.model';
+import { AuthService } from '../../../core/service/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -20,6 +23,8 @@ import { AccessEventType, AccessResultType } from '../../../core/models/access-e
     MatDialogModule,
     CommonModule,
     MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
     RouterModule
   ],
   templateUrl: './header.component.html',
@@ -43,7 +48,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private translationService: TranslationService,
     private changesDetector: ChangeDetectorRef,
     private themeService: ThemeService,
-    private accessControlService: AccessControlService
+    private accessControlService: AccessControlService,
+    private authService: AuthService
   ) {
     this.isDarkTheme = this.themeService['currentTheme'] === Theme.LIGHT;
   }
@@ -93,6 +99,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   toggleTheme(): void {
     this.themeService.toggleTheme();
     this.isDarkTheme = this.themeService['currentTheme'] === Theme.LIGHT;
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   toggleLanguageHeader(language: string): void {
