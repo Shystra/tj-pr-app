@@ -31,6 +31,15 @@ export class HikCentralService {
     return this.http.get<HikOrganizationResponse>(`${this.url}/organizations`, { params });
   }
 
+  listarSubOrganizacoes(orgIndexCode: string, pageNo: number, pageSize: number): Observable<HikOrganizationResponse> {
+    const params = new HttpParams()
+      .set('orgIndexCode', orgIndexCode)
+      .set('pageNo', pageNo)
+      .set('pageSize', pageSize);
+
+    return this.http.get<HikOrganizationResponse>(`${this.url}/organizations-by-parent`, { params });
+  }
+
   listarGruposPrivilegio(filter: PrivilegeGroupFilter): Observable<PrivilegeGroupResponse> {
     const params = new HttpParams()
       .set('pageNo', filter.pageNo)

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxMaskDirective } from 'ngx-mask';
+import { Subject, debounceTime, distinctUntilChanged, switchMap, of, takeUntil } from 'rxjs';
 import { HikCentralService } from '../../core/service/hik-central.service';
 import { CnaService } from '../../core/service/cna.service';
 import { OnlyLettersInputDirective } from '../../shared/directives/only-letters.directive';
@@ -25,21 +26,28 @@ import { FaceGroupInfo } from '../../core/models/hik-face-group.model';
   templateUrl: './control.component.html',
   styleUrl: './control.component.scss'
 })
-export class ControlComponent implements OnInit {
+export class ControlComponent implements OnInit, OnDestroy {
 
   form!: FormGroup;
   fotoPreview: string | null = null;
-  organizations: OrgInfo[] = [];
   privilegeGroups: PrivilegeGroupInfo[] = [];
   isLoading = false;
   isLoadingCna = false;
-  isLoadingOrgs = false;
   isLoadingGroups = false;
   oabSemUf = false;
   cnaData: AdvogadoCnaResponse | null = null;
   selectedGroupId = '';
   faceGroups: FaceGroupInfo[] = [];
   isLoadingFaceGroups = false;
+
+  cidadeQuery = '';
+  cidadeSugestoes: OrgInfo[] = [];
+  isLoadingCidade = false;
+  showSugestoes = false;
+  cidadeSelecionada: OrgInfo | null = null;
+
+  private cidadeSearch$ = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -77,9 +85,62 @@ export class ControlComponent implements OnInit {
     });
 
     this.ouvirTipoAcesso();
-    this.loadOrganizations();
+    this.iniciarBuscaCidade();
     this.loadPrivilegeGroups();
     this.loadFaceGroups();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private iniciarBuscaCidade() {
+    this.cidadeSearch$.pipe(
+      debounceTime(350),
+      distinctUntilChanged(),
+      switchMap(query => {
+        if (query.length < 2) {
+          this.cidadeSugestoes = [];
+          this.showSugestoes = false;
+          return of(null);
+        }
+        this.isLoadingCidade = true;
+        return this.hikService.listarOrganizacoes(1, 10, query);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (res) => {
+        this.isLoadingCidade = false;
+        if (res) {
+          this.cidadeSugestoes = res.list ?? [];
+          this.showSugestoes = this.cidadeSugestoes.length > 0;
+        }
+      },
+      error: () => {
+        this.isLoadingCidade = false;
+      }
+    });
+  }
+
+  onCidadeInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.cidadeQuery = value;
+    this.cidadeSelecionada = null;
+    this.form.patchValue({ orgIndexCode: '' });
+    this.cidadeSearch$.next(value);
+  }
+
+  selecionarCidade(org: OrgInfo) {
+    this.cidadeSelecionada = org;
+    this.cidadeQuery = org.orgName;
+    this.showSugestoes = false;
+    this.cidadeSugestoes = [];
+    this.form.patchValue({ orgIndexCode: org.orgIndexCode });
+  }
+
+  fecharSugestoes() {
+    setTimeout(() => { this.showSugestoes = false; }, 150);
   }
 
   private ouvirTipoAcesso() {
@@ -99,24 +160,6 @@ export class ControlComponent implements OnInit {
 
       beginControl?.updateValueAndValidity();
       endControl?.updateValueAndValidity();
-    });
-  }
-
-  loadOrganizations() {
-    this.isLoadingOrgs = true;
-    this.hikService.listarOrganizacoes(1, 50).subscribe({
-      next: (res) => {
-        this.organizations = res.list;
-
-        if (this.organizations.length > 0 && this.organizations[0].orgIndexCode) {
-          this.form.patchValue({ orgIndexCode: this.organizations[0].orgIndexCode });
-        }
-
-        this.isLoadingOrgs = false;
-      },
-      error: () => {
-        this.isLoadingOrgs = false;
-      }
     });
   }
 
@@ -143,13 +186,6 @@ export class ControlComponent implements OnInit {
     this.hikService.listarGruposFace({ pageNo: 1, pageSize: 50 }).subscribe({
       next: (res) => {
         this.faceGroups = res.list ?? [];
-
-        const allIndexCodes = this.faceGroups.map(g => g.indexCode).filter(Boolean);
-
-        if (allIndexCodes.length > 0) {
-          this.form.patchValue({ faceGroupIndexCode: allIndexCodes });
-        }
-
         this.isLoadingFaceGroups = false;
       },
       error: () => {
@@ -160,12 +196,19 @@ export class ControlComponent implements OnInit {
 
   onGroupChange(groupId: string) {
     this.selectedGroupId = groupId;
-    this.form.patchValue({ faceGroupIndexCode: groupId ? [groupId] : [] });
   }
 
-  isGroupSelected(groupId: string): boolean {
+  isFaceGroupSelected(indexCode: string): boolean {
     const current: string[] = this.form.get('faceGroupIndexCode')?.value ?? [];
-    return current.includes(groupId);
+    return current.includes(indexCode);
+  }
+
+  toggleFaceGroup(indexCode: string) {
+    const current: string[] = this.form.get('faceGroupIndexCode')?.value ?? [];
+    const updated = current.includes(indexCode)
+      ? current.filter(c => c !== indexCode)
+      : [...current, indexCode];
+    this.form.patchValue({ faceGroupIndexCode: updated });
   }
 
   consultarCna() {
@@ -249,12 +292,6 @@ export class ControlComponent implements OnInit {
     this.oabSemUf = !this.form.value.uf;
   }
 
-  onFaceGroupChange(event: Event) {
-    const select = event.target as HTMLSelectElement;
-    const selected = Array.from(select.selectedOptions).map(opt => opt.value);
-    this.form.patchValue({ faceGroupIndexCode: selected });
-  }
-
   registrar() {
     if (this.form.invalid) return;
 
@@ -283,7 +320,10 @@ export class ControlComponent implements OnInit {
         this.isLoading = false;
         this.cnaData = null;
         this.selectedGroupId = '';
-        this.form.reset({ tipoAcesso: 'PERMANENTE' });
+        this.cidadeQuery = '';
+        this.cidadeSelecionada = null;
+        this.cidadeSugestoes = [];
+        this.form.reset({ tipoAcesso: 'PERMANENTE', accessType: AccessType.Employee });
         this.fotoPreview = null;
       },
       error: () => {
