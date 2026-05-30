@@ -76,15 +76,42 @@
             </div>
 
             <div class="col-md-12">
-              <label class="form-label">Organização <span class="text-danger">*</span></label>
-              <select class="form-select" formControlName="orgIndexCode" [disabled]="isLoadingOrgs">
-                <option value="">
-                  {{ isLoadingOrgs ? 'Carregando...' : 'Selecione' }}
-                </option>
-                @for (org of organizations; track org.orgIndexCode) {
-                <option [value]="org.orgIndexCode">{{ org.orgName }}</option>
+              <label class="form-label">Cidade / Organização <span class="text-danger">*</span></label>
+              <div class="position-relative">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Digite o nome da cidade..."
+                    [value]="cidadeQuery"
+                    (input)="onCidadeInput($event)"
+                    (blur)="fecharSugestoes()"
+                    autocomplete="off">
+                  @if (isLoadingCidade) {
+                    <span class="input-group-text" style="background:transparent; border-color: var(--monitor-activity-border)">
+                      <span class="spinner-border spinner-border-sm text-muted"></span>
+                    </span>
+                  } @else if (cidadeSelecionada) {
+                    <span class="input-group-text text-success" style="background:transparent; border-color: var(--monitor-activity-border)">
+                      <i class="bi bi-check-circle-fill"></i>
+                    </span>
+                  }
+                </div>
+                @if (cidadeSelecionada) {
+                  <div class="small text-muted mt-1">
+                    <i class="bi bi-building me-1"></i>{{ cidadeSelecionada.orgName }}
+                  </div>
                 }
-              </select>
+                @if (showSugestoes) {
+                  <ul class="list-group position-absolute w-100 shadow-sm z-3" style="top: 100%; max-height: 220px; overflow-y: auto;">
+                    @for (org of cidadeSugestoes; track org.orgIndexCode) {
+                      <li class="list-group-item list-group-item-action" style="cursor:pointer" (mousedown)="selecionarCidade(org)">
+                        <i class="bi bi-geo-alt me-2 text-muted"></i>{{ org.orgName }}
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
             </div>
 
             <div class="col-12">
@@ -167,25 +194,42 @@
               }
             </div>
             <div class="col-12 mt-2">
-              <label class="form-label">Grupo de Face <span class="text-danger">*</span></label>
+              <label class="form-label">Bibliotecas de Face</label>
               @if (isLoadingFaceGroups) {
               <div class="d-flex align-items-center gap-2 text-muted">
                 <span class="spinner-border spinner-border-sm"></span>
-                <span class="small">Carregando grupos...</span>
+                <span class="small">Carregando bibliotecas...</span>
               </div>
               } @else if (faceGroups.length === 0) {
               <div class="alert alert-warning py-2 mb-0">
                 <i class="bi bi-exclamation-triangle me-2"></i>
-                <span class="small">Nenhum grupo de face encontrado.</span>
+                <span class="small">Nenhuma biblioteca de face encontrada.</span>
               </div>
               } @else {
-              <select class="form-select" multiple (change)="onFaceGroupChange($event)">
+              <div class="border rounded-3 p-2" style="max-height: 180px; overflow-y: auto; border-color: var(--monitor-activity-border) !important;">
                 @for (group of faceGroups; track group.indexCode) {
-                <option [value]="group.indexCode" [selected]="form.value.faceGroupIndexCode?.includes(group.indexCode)">
-                  {{ group.name }}
-                </option>
+                <div class="form-check px-3 py-1">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [id]="'fg-' + group.indexCode"
+                    [checked]="isFaceGroupSelected(group.indexCode)"
+                    (change)="toggleFaceGroup(group.indexCode)">
+                  <label class="form-check-label" [for]="'fg-' + group.indexCode">
+                    {{ group.name }}
+                    @if (group.description) {
+                      <span class="text-muted small ms-1">— {{ group.description }}</span>
+                    }
+                  </label>
+                </div>
                 }
-              </select>
+              </div>
+              @if ((form.get('faceGroupIndexCode')?.value?.length ?? 0) > 0) {
+                <div class="small text-muted mt-1">
+                  <i class="bi bi-check2-square me-1"></i>
+                  {{ form.get('faceGroupIndexCode')?.value?.length }} biblioteca(s) selecionada(s)
+                </div>
+              }
               }
             </div>
           </div>
