@@ -45,6 +45,7 @@ export class ControlComponent implements OnInit {
   orgFilter = '';
   showOrgDropdown = false;
   orgSelecionada: OrgInfo | null = null;
+  private isClickingDropdown = false;
 
   constructor(
     private fb: FormBuilder,
@@ -121,8 +122,17 @@ export class ControlComponent implements OnInit {
     this.form.patchValue({ orgIndexCode: org.orgIndexCode });
   }
 
+  onDropdownPanelMousedown() {
+    this.isClickingDropdown = true;
+  }
+
   fecharOrgDropdown() {
-    setTimeout(() => { this.showOrgDropdown = false; }, 150);
+    setTimeout(() => {
+      if (!this.isClickingDropdown) {
+        this.showOrgDropdown = false;
+      }
+      this.isClickingDropdown = false;
+    }, 150);
   }
 
   limparOrg() {
@@ -327,8 +337,8 @@ export class ControlComponent implements OnInit {
       phoneNo: this.form.value.phoneNo,
       email: this.form.value.email,
       cpf: this.form.value.cpf,
-      ddd: this.form.value.ddd ?? null,
-      inscricao: this.form.value.inscricao ?? null,
+      ddd: this.form.value.ddd || null,
+      inscricao: this.form.value.inscricao || null,
       faceData: this.form.value.faceData,
       faceGroupIndexCode: this.form.value.faceGroupIndexCode,
       beginTime,
