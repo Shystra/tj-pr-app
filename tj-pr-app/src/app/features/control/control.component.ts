@@ -287,9 +287,20 @@ export class ControlComponent implements OnInit {
 
   private resolverDatas(): { beginTime: string; endTime: string } {
     if (this.isPermanente) {
+      const inicio = new Date();
+      const fim = new Date(inicio);
+      fim.setFullYear(fim.getFullYear() + 10);
+
+      this.snackBar.open('Acesso permanente limitado a 10 anos pelo sistema.', 'Ok', {
+        duration: 5000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['snack-info']
+      });
+
       return {
-        beginTime: this.toLocalISOString(new Date()),
-        endTime: this.toLocalISOString(new Date('2099-12-31T23:59:59'))
+        beginTime: this.toLocalISOString(inicio),
+        endTime: this.toLocalISOString(fim)
       };
     }
 
