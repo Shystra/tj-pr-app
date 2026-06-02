@@ -105,6 +105,11 @@
     color: var(--text-color);
 }
 
+/* ─── Select com busca (organização) ─── */
+.org-dropdown-item:hover {
+    background: rgba(var(--bs-primary-rgb), 0.08);
+}
+
 .group-check-card {
   cursor: pointer;
   transition: all 0.2s ease;
