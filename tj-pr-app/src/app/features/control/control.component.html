@@ -77,41 +77,63 @@
 
             <div class="col-md-12">
               <label class="form-label">Cidade / Organização <span class="text-danger">*</span></label>
-              <div class="position-relative">
-                <div class="input-group">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Digite o nome da cidade..."
-                    [value]="cidadeQuery"
-                    (input)="onCidadeInput($event)"
-                    (blur)="fecharSugestoes()"
-                    autocomplete="off">
-                  @if (isLoadingCidade) {
-                    <span class="input-group-text" style="background:transparent; border-color: var(--monitor-activity-border)">
-                      <span class="spinner-border spinner-border-sm text-muted"></span>
-                    </span>
-                  } @else if (cidadeSelecionada) {
-                    <span class="input-group-text text-success" style="background:transparent; border-color: var(--monitor-activity-border)">
-                      <i class="bi bi-check-circle-fill"></i>
-                    </span>
+
+              @if (isLoadingOrgs) {
+                <div class="d-flex align-items-center gap-2 text-muted">
+                  <span class="spinner-border spinner-border-sm"></span>
+                  <span class="small">Carregando organizações...</span>
+                </div>
+              } @else {
+                <div class="position-relative">
+                  <!-- Trigger do select -->
+                  <button
+                    type="button"
+                    class="form-select text-start d-flex align-items-center justify-content-between"
+                    (click)="abrirOrgDropdown()"
+                    (blur)="fecharOrgDropdown()">
+                    @if (orgSelecionada) {
+                      <span>
+                        <i class="bi bi-geo-alt me-2 text-muted"></i>{{ orgSelecionada.orgName }}
+                      </span>
+                      <i class="bi bi-x-circle text-muted" (click)="$event.stopPropagation(); limparOrg()"></i>
+                    } @else {
+                      <span class="text-muted">Selecione uma cidade...</span>
+                      <i class="bi bi-chevron-down text-muted"></i>
+                    }
+                  </button>
+
+                  <!-- Painel dropdown -->
+                  @if (showOrgDropdown) {
+                    <div class="position-absolute w-100 shadow rounded-3 z-3"
+                         style="top: calc(100% + 4px); border: 1px solid var(--monitor-activity-border); background: var(--monitor-activity-bg);">
+                      <!-- Campo de busca -->
+                      <div class="p-2 border-bottom" style="border-color: var(--monitor-activity-border) !important">
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="Pesquisar cidade..."
+                          [value]="orgFilter"
+                          (input)="orgFilter = $any($event.target).value"
+                          autocomplete="off">
+                      </div>
+                      <!-- Lista filtrada -->
+                      <ul class="list-unstyled mb-0" style="max-height: 220px; overflow-y: auto;">
+                        @if (filteredOrgs.length === 0) {
+                          <li class="px-3 py-2 text-muted small">Nenhuma organização encontrada.</li>
+                        }
+                        @for (org of filteredOrgs; track org.orgIndexCode) {
+                          <li class="px-3 py-2 d-flex align-items-center gap-2 org-dropdown-item"
+                              style="cursor: pointer;"
+                              (mousedown)="selecionarOrg(org)">
+                            <i class="bi bi-geo-alt text-muted"></i>
+                            <span>{{ org.orgName }}</span>
+                          </li>
+                        }
+                      </ul>
+                    </div>
                   }
                 </div>
-                @if (cidadeSelecionada) {
-                  <div class="small text-muted mt-1">
-                    <i class="bi bi-building me-1"></i>{{ cidadeSelecionada.orgName }}
-                  </div>
-                }
-                @if (showSugestoes) {
-                  <ul class="list-group position-absolute w-100 shadow-sm z-3" style="top: 100%; max-height: 220px; overflow-y: auto;">
-                    @for (org of cidadeSugestoes; track org.orgIndexCode) {
-                      <li class="list-group-item list-group-item-action" style="cursor:pointer" (mousedown)="selecionarCidade(org)">
-                        <i class="bi bi-geo-alt me-2 text-muted"></i>{{ org.orgName }}
-                      </li>
-                    }
-                  </ul>
-                }
-              </div>
+              }
             </div>
 
             <div class="col-12">

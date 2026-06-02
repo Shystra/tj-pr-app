@@ -19,13 +19,17 @@ export class HikCentralService {
     return this.http.post(`${this.url}/persons`, payload);
   }
 
-  listarOrganizacoes(pageNo: number, pageSize: number, orgName?: string): Observable<HikOrganizationResponse> {
+  listarOrganizacoes(pageNo: number, pageSize: number, orgName?: string, orgIndexCode?: string): Observable<HikOrganizationResponse> {
     let params = new HttpParams()
       .set('pageNo', pageNo)
       .set('pageSize', pageSize);
 
     if (orgName) {
       params = params.set('orgName', orgName);
+    }
+
+    if (orgIndexCode !== undefined) {
+      params = params.set('orgIndexCode', orgIndexCode);
     }
 
     return this.http.get<HikOrganizationResponse>(`${this.url}/organizations`, { params });
