@@ -57,3 +57,12 @@ a {
 .snack-error .mat-mdc-snack-bar-action {
   color: #fecaca !important;
 }
+
+.snack-info .mdc-snackbar__surface {
+  background-color: #2563eb !important;
+  color: #fff !important;
+}
+
+.snack-info .mat-mdc-snack-bar-action {
+  color: #bfdbfe !important;
+}

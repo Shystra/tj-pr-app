@@ -65,10 +65,14 @@
               <label class="form-label">Sobrenome <span class="text-danger">*</span></label>
               <input onlyLettersInput type="text" class="form-control" formControlName="personFamilyName">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-2">
+              <label class="form-label">DDD</label>
+              <input type="text" class="form-control" formControlName="ddd" mask="00" placeholder="00" maxlength="2">
+            </div>
+            <div class="col-md-4">
               <label class="form-label">Telefone</label>
-              <input type="text" class="form-control" formControlName="phoneNo" mask="(00) 00000-0000||(00) 0000-0000"
-                placeholder="(00) 00000-0000">
+              <input type="text" class="form-control" formControlName="phoneNo" mask="00000-0000||0000-0000"
+                placeholder="00000-0000">
             </div>
             <div class="col-md-6">
               <label class="form-label">Email</label>
@@ -137,10 +141,6 @@
               }
             </div>
 
-            <div class="col-12">
-              <label class="form-label">Observações</label>
-              <textarea class="form-control" rows="4" formControlName="remark"></textarea>
-            </div>
           </div>
         </div>
 
