@@ -76,7 +76,7 @@
             </div>
 
             <div class="col-md-12">
-              <label class="form-label">Cidade / Organização <span class="text-danger">*</span></label>
+              <label class="form-label">Cidade / Departamento <span class="text-danger">*</span></label>
 
               @if (isLoadingOrgs) {
                 <div class="d-flex align-items-center gap-2 text-muted">
@@ -196,7 +196,7 @@
             }
             <!-- Departamento (select único) -->
             <div class="col-12 mt-2">
-              <label class="form-label">Departamento</label>
+              <label class="form-label">Níveis de acesso</label>
               @if (isLoadingGroups) {
               <div class="d-flex align-items-center gap-2 text-muted">
                 <span class="spinner-border spinner-border-sm"></span>
@@ -209,7 +209,7 @@
               </div>
               } @else {
               <select class="form-select" [value]="selectedGroupId" (change)="onGroupChange($any($event.target).value)">
-                <option value="">Selecione um departamento</option>
+                <option value="">Selecione um nível de acesso</option>
                 @for (group of privilegeGroups; track group.privilegeGroupId) {
                 <option [value]="group.privilegeGroupId">{{ group.privilegeGroupName }}</option>
                 }
