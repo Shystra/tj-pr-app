@@ -38,3 +38,22 @@ body {
 a {
   color: inherit;
 }
+
+/* ─── Toasters (MatSnackBar) ─── */
+.snack-success .mdc-snackbar__surface {
+  background-color: #16a34a !important;
+  color: #fff !important;
+}
+
+.snack-success .mat-mdc-snack-bar-action {
+  color: #bbf7d0 !important;
+}
+
+.snack-error .mdc-snackbar__surface {
+  background-color: #dc2626 !important;
+  color: #fff !important;
+}
+
+.snack-error .mat-mdc-snack-bar-action {
+  color: #fecaca !important;
+}

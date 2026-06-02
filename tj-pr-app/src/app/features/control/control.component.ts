@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxMaskDirective } from 'ngx-mask';
 import { HikCentralService } from '../../core/service/hik-central.service';
 import { CnaService } from '../../core/service/cna.service';
@@ -19,6 +20,7 @@ import { FaceGroupInfo } from '../../core/models/hik-face-group.model';
     CommonModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatSnackBarModule,
     OnlyLettersInputDirective,
     NgxMaskDirective
   ],
@@ -49,7 +51,8 @@ export class ControlComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private hikService: HikCentralService,
-    private cnaService: CnaService
+    private cnaService: CnaService,
+    private snackBar: MatSnackBar
   ) { }
 
   get isPermanente(): boolean {
@@ -335,9 +338,21 @@ export class ControlComponent implements OnInit {
         this.orgFilter = '';
         this.form.reset({ tipoAcesso: 'PERMANENTE', accessType: AccessType.Visitor });
         this.fotoPreview = null;
+        this.snackBar.open('Acesso cadastrado com sucesso!', 'Fechar', {
+          duration: 4000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['snack-success']
+        });
       },
       error: () => {
         this.isLoading = false;
+        this.snackBar.open('Erro ao cadastrar acesso. Tente novamente.', 'Fechar', {
+          duration: 5000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['snack-error']
+        });
       }
     });
   }
