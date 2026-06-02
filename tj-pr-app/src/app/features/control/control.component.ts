@@ -10,7 +10,6 @@ import { OnlyLettersInputDirective } from '../../shared/directives/only-letters.
 import { OrgInfo } from '../../core/models/hik-organization.model';
 import { AccessType, HikPersonRequest } from '../../core/models/hik-person.model';
 import { PrivilegeGroupInfo } from '../../core/models/hik-privilege-group.model';
-import { AdvogadoCnaResponse } from '../../core/models/cna.model';
 import { FaceGroupInfo } from '../../core/models/hik-face-group.model';
 
 @Component({
@@ -36,7 +35,6 @@ export class ControlComponent implements OnInit {
   isLoadingCna = false;
   isLoadingGroups = false;
   oabSemUf = false;
-  cnaData: AdvogadoCnaResponse | null = null;
   selectedGroupId = '';
   faceGroups: FaceGroupInfo[] = [];
   isLoadingFaceGroups = false;
@@ -77,11 +75,11 @@ export class ControlComponent implements OnInit {
       accessType: [AccessType.Visitor, Validators.required],
       personGivenName: ['', Validators.required],
       personFamilyName: ['', Validators.required],
-      gender: [1],
       orgIndexCode: ['', Validators.required],
+      ddd: [null],
       phoneNo: [''],
       email: ['', Validators.email],
-      remark: [''],
+      inscricao: [null],
       faceData: [''],
       faceGroupIndexCode: [[]],
       tipoAcesso: ['PERMANENTE', Validators.required],
@@ -216,19 +214,16 @@ export class ControlComponent implements OnInit {
     this.isLoadingCna = true;
     this.cnaService.consultarAdvogado(uf, oab).subscribe({
       next: (res) => {
-        this.cnaData = res;
-
         const partes = res.nome.split(' ');
-        const telefoneCompleto = res.ddd && res.telefone
-          ? `${res.ddd}${res.telefone}`
-          : res.telefone ?? '';
 
         this.form.patchValue({
           personGivenName: partes[0],
           personFamilyName: partes.slice(1).join(' '),
           email: res.email ?? '',
-          phoneNo: telefoneCompleto,
-          cpf: res.cpf ?? ''
+          ddd: res.ddd ?? null,
+          phoneNo: res.telefone ?? '',
+          cpf: res.cpf ?? '',
+          inscricao: res.inscricao ?? null
         });
 
         if (res.numeroSeguranca) {
@@ -292,9 +287,20 @@ export class ControlComponent implements OnInit {
 
   private resolverDatas(): { beginTime: string; endTime: string } {
     if (this.isPermanente) {
+      const inicio = new Date();
+      const fim = new Date(inicio);
+      fim.setFullYear(fim.getFullYear() + 10);
+
+      this.snackBar.open('Acesso permanente limitado a 10 anos pelo sistema.', 'Ok', {
+        duration: 5000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        panelClass: ['snack-info']
+      });
+
       return {
-        beginTime: this.toLocalISOString(new Date()),
-        endTime: this.toLocalISOString(new Date('2099-12-31T23:59:59'))
+        beginTime: this.toLocalISOString(inicio),
+        endTime: this.toLocalISOString(fim)
       };
     }
 
@@ -316,23 +322,22 @@ export class ControlComponent implements OnInit {
       accessType: this.form.value.accessType,
       personGivenName: this.form.value.personGivenName,
       personFamilyName: this.form.value.personFamilyName,
-      gender: this.form.value.gender,
       orgIndexCode: this.form.value.orgIndexCode,
       privilegeGroupId: this.selectedGroupId,
       phoneNo: this.form.value.phoneNo,
       email: this.form.value.email,
-      remark: this.form.value.remark,
+      cpf: this.form.value.cpf,
+      ddd: this.form.value.ddd ?? null,
+      inscricao: this.form.value.inscricao ?? null,
       faceData: this.form.value.faceData,
       faceGroupIndexCode: this.form.value.faceGroupIndexCode,
       beginTime,
-      endTime,
-      advogadoInfo: this.cnaData
+      endTime
     };
 
     this.hikService.cadastrarPessoa(payload).subscribe({
       next: () => {
         this.isLoading = false;
-        this.cnaData = null;
         this.selectedGroupId = '';
         this.orgSelecionada = null;
         this.orgFilter = '';
