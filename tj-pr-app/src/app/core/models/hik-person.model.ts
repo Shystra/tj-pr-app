@@ -32,15 +32,15 @@ export interface HikPersonRequest {
   accessType: AccessType;
   personFamilyName: string;
   personGivenName: string;
-  gender: number;
   orgIndexCode: string;
   privilegeGroupId: string;
-  remark?: string;
   phoneNo?: string;
   email?: string;
+  cpf?: string;
+  ddd: string | null;
+  inscricao: string | null;
   faceData: string;
   faceGroupIndexCode: string[];
   beginTime: string;
   endTime: string;
-  advogadoInfo: TOAdvogado | null;
 }
