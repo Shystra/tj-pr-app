@@ -105,7 +105,8 @@
                   <!-- Painel dropdown -->
                   @if (showOrgDropdown) {
                     <div class="position-absolute w-100 shadow rounded-3 z-3"
-                         style="top: calc(100% + 4px); border: 1px solid var(--monitor-activity-border); background: var(--monitor-activity-bg);">
+                         style="top: calc(100% + 4px); border: 1px solid var(--monitor-activity-border); background: var(--monitor-activity-bg);"
+                         (mousedown)="onDropdownPanelMousedown()">
                       <!-- Campo de busca -->
                       <div class="p-2 border-bottom" style="border-color: var(--monitor-activity-border) !important">
                         <input

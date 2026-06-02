@@ -47,6 +47,7 @@ export class ControlComponent implements OnInit {
   orgFilter = '';
   showOrgDropdown = false;
   orgSelecionada: OrgInfo | null = null;
+  private isClickingDropdown = false;
 
   constructor(
     private fb: FormBuilder,
@@ -123,8 +124,17 @@ export class ControlComponent implements OnInit {
     this.form.patchValue({ orgIndexCode: org.orgIndexCode });
   }
 
+  onDropdownPanelMousedown() {
+    this.isClickingDropdown = true;
+  }
+
   fecharOrgDropdown() {
-    setTimeout(() => { this.showOrgDropdown = false; }, 150);
+    setTimeout(() => {
+      if (!this.isClickingDropdown) {
+        this.showOrgDropdown = false;
+      }
+      this.isClickingDropdown = false;
+    }, 150);
   }
 
   limparOrg() {
